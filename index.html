@@ -4,278 +4,64 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#eef8f4" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>WeekAway — Smart Time-Off Planner</title>
   <style>
     :root{
-      --bg:#f4f8f7;
-      --card:#ffffff;
-      --ink:#24322f;
-      --muted:#6c7a76;
-      --line:#dfe9e6;
-      --accent:#2f7f70;
-      --accent-dark:#225f55;
-      --accent-soft:#dff3ed;
-      --blue-soft:#e7f1fb;
-      --gold-soft:#fff3d9;
-      --rose-soft:#fbe8ea;
-      --shadow:0 10px 30px rgba(34,69,61,.08);
+      --bg:#f4f8f7; --card:#ffffff; --ink:#24322f; --muted:#6c7a76;
+      --line:#dfe9e6; --accent:#2f7f70; --accent-dark:#225f55;
+      --accent-soft:#dff3ed; --blue-soft:#e7f1fb; --shadow:0 10px 30px rgba(34,69,61,.08);
       --radius:22px;
     }
-
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
-      margin:0;
-      min-height:100vh;
-      color:var(--ink);
-      background:
-        radial-gradient(circle at 8% 0%, #e1f3ec 0, transparent 34%),
-        radial-gradient(circle at 92% 8%, #e7effb 0, transparent 31%),
-        var(--bg);
-      font-family:Inter, ui-rounded, "SF Pro Rounded", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      -webkit-font-smoothing:antialiased;
+      margin:0; min-height:100vh; color:var(--ink);
+      background: radial-gradient(circle at 8% 0%, #e1f3ec 0, transparent 34%),
+                  radial-gradient(circle at 92% 8%, #e7effb 0, transparent 31%), var(--bg);
+      font-family:Inter, system-ui, sans-serif; -webkit-font-smoothing:antialiased;
     }
-
     button,input,select{font:inherit}
     button{touch-action:manipulation}
     a{color:inherit}
-
-    .app{
-      width:min(760px,100%);
-      margin:0 auto;
-      padding:14px 14px 54px;
-    }
-
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:4px 2px 13px;
-    }
-
-    .brand{display:flex;align-items:center;gap:10px}
-    .brand-mark{
-      width:42px;height:42px;border-radius:15px;
-      display:grid;place-items:center;
-      background:var(--accent);
-      color:white;
-      box-shadow:0 8px 18px rgba(47,127,112,.22);
-      font-size:22px;
-    }
+    .app{width:min(760px,100%); margin:0 auto; padding:14px 14px 54px;}
+    .topbar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:4px 2px 13px;}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand-mark{width:42px;height:42px;border-radius:15px;display:grid;place-items:center;background:var(--accent);color:white;font-size:22px;}
     .brand h1{font-size:23px;line-height:1;margin:0;letter-spacing:-.7px}
-    .brand p{font-size:12px;color:var(--muted);margin:4px 0 0}
-
-    .icon-btn{
-      width:42px;height:42px;border:1px solid var(--line);border-radius:15px;
-      background:rgba(255,255,255,.82);color:var(--ink);cursor:pointer;
-      display:grid;place-items:center;font-size:19px;
-    }
-
-    .hero{
-      background:linear-gradient(135deg,#2f7f70,#4a8e83);
-      color:#fff;
-      border-radius:28px;
-      padding:22px;
-      box-shadow:0 16px 38px rgba(31,104,91,.18);
-      margin-bottom:14px;
-    }
-    .hero .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.78}
-    .hero h2{font-size:31px;line-height:1.05;letter-spacing:-1px;margin:8px 0 9px;max-width:530px}
-    .hero p{margin:0;line-height:1.5;font-size:14px;opacity:.9;max-width:580px}
-
-    .card{
-      background:rgba(255,255,255,.94);
-      border:1px solid rgba(220,233,229,.95);
-      border-radius:var(--radius);
-      padding:18px;
-      box-shadow:var(--shadow);
-      margin-top:13px;
-    }
-
-    .section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:13px}
-    .section-head h3{margin:0;font-size:17px;letter-spacing:-.25px}
-    .section-head p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.4}
-    .step{
-      flex:0 0 auto;min-width:30px;height:30px;padding:0 9px;border-radius:999px;
-      display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-dark);
-      font-size:12px;font-weight:850;
-    }
-
+    .hero{background:linear-gradient(135deg,#2f7f70,#4a8e83); color:#fff; border-radius:28px; padding:22px; margin-bottom:14px;}
+    .hero h2{font-size:31px;line-height:1.05;margin:8px 0 9px;}
+    .hero p{margin:0;font-size:14px;opacity:.9;}
+    .card{background:rgba(255,255,255,.94); border:1px solid rgba(220,233,229,.95); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); margin-top:13px;}
+    .section-head{display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:13px}
+    .section-head h3{margin:0;font-size:17px;}
+    .step{width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-dark);font-size:12px;font-weight:850;}
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-
-    label.field{display:block}
-    .field-title{display:block;font-size:12px;font-weight:800;margin:0 0 7px;color:#41504c}
-    input,select{
-      width:100%;height:49px;border:1px solid var(--line);border-radius:15px;
-      background:#fbfdfc;color:var(--ink);padding:0 13px;outline:none;
-    }
-    input:focus,select:focus{border-color:#80b4a8;box-shadow:0 0 0 4px rgba(47,127,112,.09)}
-
+    label.field{display:block; margin-top:10px;}
+    .field-title{display:block;font-size:12px;font-weight:800;margin:0 0 7px;}
+    input,select{width:100%;height:49px;border:1px solid var(--line);border-radius:15px;background:#fbfdfc;padding:0 13px;outline:none;}
     .zip-row{display:grid;grid-template-columns:1fr auto;gap:9px}
-    .small-btn{
-      min-height:49px;border:1px solid var(--line);border-radius:15px;background:#f7fbfa;
-      color:var(--accent-dark);font-weight:800;padding:0 15px;cursor:pointer;
-    }
-    .location-note{min-height:18px;margin-top:7px;font-size:12px;color:var(--muted)}
-    .location-note.good{color:var(--accent-dark);font-weight:700}
-    .location-note.bad{color:#9b4b51}
-
-    .chip-grid{display:flex;flex-wrap:wrap;gap:8px}
-    .choice{
-      border:1px solid var(--line);background:#fbfdfc;color:#42514d;
-      min-height:42px;border-radius:999px;padding:9px 13px;cursor:pointer;
-      display:inline-flex;align-items:center;justify-content:center;gap:7px;
-      font-size:13px;font-weight:750;transition:.16s ease;
-    }
-    .choice:hover{transform:translateY(-1px)}
-    .choice.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 7px 17px rgba(47,127,112,.18)}
-    .choice .check{display:none;font-weight:900}
-    .choice.active .check{display:inline}
-
-    .interest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-    .interest{
-      min-height:72px;border:1px solid var(--line);border-radius:17px;background:#fbfdfc;
-      color:#40504b;display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:5px;padding:8px 5px;cursor:pointer;font-weight:780;font-size:12px;text-align:center;
-    }
-    .interest .emoji{font-size:24px;line-height:1}
-    .interest.active{background:var(--accent-soft);border-color:#84b8ac;color:var(--accent-dark);box-shadow:inset 0 0 0 1px #84b8ac}
-
-    .conditional{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+    .small-btn{min-height:49px;border:1px solid var(--line);border-radius:15px;background:#f7fbfa;color:var(--accent-dark);font-weight:800;padding:0 15px;cursor:pointer;}
+    .interest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px; margin-top:5px;}
+    .interest{border:1px solid var(--line);border-radius:17px;background:#fbfdfc;padding:12px 5px;cursor:pointer;font-weight:780;font-size:12px;text-align:center;}
+    .interest.active{background:var(--accent-soft);border-color:#84b8ac;color:var(--accent-dark);}
+    .plan-btn{width:100%;min-height:56px;border:0;border-radius:18px;margin-top:15px;background:var(--accent);color:#fff;font-weight:900;font-size:16px;cursor:pointer;}
     .hidden{display:none!important}
-
-    .plan-btn{
-      width:100%;min-height:56px;border:0;border-radius:18px;margin-top:15px;
-      background:var(--accent);color:#fff;font-weight:900;font-size:16px;cursor:pointer;
-      box-shadow:0 11px 23px rgba(47,127,112,.24);
-    }
-    .plan-btn:active{transform:translateY(1px)}
-    .plan-btn:disabled{opacity:.6;cursor:wait}
-
-    .mini-note{font-size:11px;color:var(--muted);line-height:1.45;margin:10px 2px 0;text-align:center}
-
-    .loading{
-      padding:24px;text-align:center;color:var(--muted);font-size:13px;
-    }
-    .spinner{
-      width:31px;height:31px;border-radius:50%;border:3px solid #dce9e5;border-top-color:var(--accent);
-      animation:spin .8s linear infinite;margin:0 auto 10px;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    .result-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-    .result-intro h2{margin:0;font-size:23px;letter-spacing:-.6px}
-    .result-intro p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
-    .ghost-btn{border:1px solid var(--line);background:#fff;border-radius:13px;padding:9px 11px;font-weight:800;color:#53625e;cursor:pointer;font-size:12px;white-space:nowrap}
-
+    .loading{padding:24px;text-align:center;color:var(--muted);font-size:13px;}
     .trip-list{display:grid;gap:11px;margin-top:14px}
-    .trip-card{
-      border:1px solid var(--line);border-radius:20px;padding:15px;background:#fff;cursor:pointer;
-      transition:.18s ease;position:relative;overflow:hidden;
-    }
-    .trip-card:hover{transform:translateY(-1px);box-shadow:0 9px 25px rgba(40,73,66,.08)}
+    .trip-card{border:1px solid var(--line);border-radius:20px;padding:15px;background:#fff;cursor:pointer;}
     .trip-card.selected{border-color:#6fa99c;box-shadow:0 0 0 3px rgba(47,127,112,.09)}
-    .trip-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-    .trip-name{font-size:19px;font-weight:900;letter-spacing:-.35px}
-    .trip-sub{font-size:12px;color:var(--muted);margin-top:3px}
-    .match{background:var(--accent-soft);color:var(--accent-dark);font-weight:900;font-size:12px;padding:7px 9px;border-radius:999px;white-space:nowrap}
-    .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
-    .fact{background:#f7faf9;border-radius:13px;padding:9px 8px}
-    .fact b{display:block;font-size:12px;line-height:1.25}
-    .fact span{display:block;font-size:10px;color:var(--muted);margin-top:3px}
-    .reason{margin:11px 0 0;font-size:12px;line-height:1.45;color:#50605b}
-    .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-    .tag{font-size:10px;font-weight:800;padding:5px 7px;border-radius:999px;background:var(--blue-soft);color:#35566e}
-
-    .detail-title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-    .detail-title h2{margin:0;font-size:24px;letter-spacing:-.6px}
-    .detail-title p{margin:5px 0 0;color:var(--muted);font-size:12px}
-    .route-link{border:1px solid var(--line);background:#fff;border-radius:13px;padding:9px 10px;text-decoration:none;font-weight:850;color:var(--accent-dark);font-size:12px;white-space:nowrap}
-
-    .weather-strip{display:flex;gap:7px;overflow-x:auto;padding:3px 1px 4px;margin-top:13px;scrollbar-width:none}
-    .weather-strip::-webkit-scrollbar{display:none}
-    .weather-day{min-width:89px;border-radius:15px;background:#f5f9f8;padding:10px;text-align:center}
-    .weather-day b{display:block;font-size:11px}
-    .weather-day .wx{font-size:23px;margin:4px 0}
-    .weather-day span{font-size:10px;color:var(--muted)}
-
-    .subhead{font-size:15px;margin:19px 0 4px;letter-spacing:-.15px}
-    .subcopy{font-size:11px;color:var(--muted);margin:0 0 10px;line-height:1.4}
-
-    .activity-list{display:grid;gap:8px}
-    .activity-row{
-      display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;
-      border:1px solid var(--line);border-radius:16px;padding:11px;background:#fbfdfc;cursor:pointer;
-    }
-    .activity-row input{width:20px;height:20px;accent-color:var(--accent);margin:0}
-    .activity-icon{width:33px;height:33px;border-radius:11px;background:var(--accent-soft);display:grid;place-items:center;font-size:17px}
-    .activity-name{font-weight:850;font-size:13px;line-height:1.25}
-    .activity-type{font-size:10px;color:var(--muted);margin-top:3px}
-    .activity-cost{font-size:10px;font-weight:850;color:#55645f;background:#eff4f2;padding:5px 7px;border-radius:999px}
-
-    .event-actions{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 2px}
-    .search-link{display:inline-flex;align-items:center;min-height:39px;padding:8px 11px;border:1px solid var(--line);border-radius:13px;text-decoration:none;background:#fff;font-size:11px;font-weight:850;color:var(--accent-dark)}
-
-    .timeline{display:grid;gap:10px;margin-top:10px}
+    .trip-name{font-size:19px;font-weight:900;}
+    .activity-list{display:grid;gap:8px; margin-top:10px;}
+    .activity-row{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:10px;border:1px solid var(--line);border-radius:16px;padding:11px;background:#fbfdfc;cursor:pointer;}
+    .activity-row input{width:20px;height:20px;accent-color:var(--accent);}
+    .activity-name{font-weight:850;font-size:13px; display:block;}
+    .activity-note{font-size:11px; color:var(--muted); display:block; margin-top:2px;}
+    .timeline{display:grid;gap:15px;margin-top:20px}
     .day-card{border-left:4px solid #7dac9f;background:#f8fbfa;border-radius:0 17px 17px 0;padding:12px 13px}
-    .day-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
-    .day-head b{font-size:14px}
-    .day-head span{font-size:10px;color:var(--muted)}
-    .slot{display:grid;grid-template-columns:62px 1fr;gap:8px;margin-top:9px;font-size:12px;line-height:1.35}
+    .day-head{display:flex;justify-content:space-between;align-items:baseline; margin-bottom:10px;}
+    .slot{display:grid;grid-template-columns:62px 1fr;gap:8px;margin-top:9px;font-size:12px;}
     .slot-time{color:var(--muted);font-weight:780;font-size:10px;padding-top:2px}
-    .slot-text b{font-size:12px}
-    .slot-text small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
-
-    .summary-box{background:linear-gradient(135deg,#eef8f5,#edf4fb);border-radius:18px;padding:14px;margin-top:15px}
-    .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-    .summary-item b{display:block;font-size:14px}
-    .summary-item span{font-size:10px;color:var(--muted)}
-    .action-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
-    .action-row button{min-height:46px;border-radius:15px;font-weight:900;cursor:pointer}
-    .primary-small{border:0;background:var(--accent);color:white}
-    .secondary-small{border:1px solid var(--line);background:#fff;color:var(--accent-dark)}
-
-    .empty{border:1px dashed #cbdad6;border-radius:18px;padding:18px;text-align:center;color:var(--muted);font-size:12px;line-height:1.5}
-
-    footer{padding:24px 8px 0;text-align:center;color:#7b8985;font-size:10px;line-height:1.55}
-
-    dialog{
-      width:min(520px,calc(100% - 28px));border:0;border-radius:24px;padding:0;
-      box-shadow:0 24px 80px rgba(21,46,40,.25);color:var(--ink);
-    }
-    dialog::backdrop{background:rgba(24,40,36,.45);backdrop-filter:blur(3px)}
-    .modal{padding:20px}
-    .modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
-    .modal-head h3{margin:0;font-size:19px}
-    .close-btn{width:36px;height:36px;border:1px solid var(--line);background:#fff;border-radius:12px;cursor:pointer}
-    .setting-note{font-size:11px;color:var(--muted);line-height:1.5;margin:7px 0 12px}
-
-    .toast{
-      position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);
-      background:#233b35;color:white;padding:11px 15px;border-radius:14px;font-size:12px;font-weight:800;
-      opacity:0;pointer-events:none;transition:.22s ease;z-index:20;max-width:calc(100% - 30px);text-align:center;
-    }
-    .toast.show{opacity:1;transform:translate(-50%,0)}
-
-    @media (max-width:560px){
-      .app{padding:11px 11px 45px}
-      .hero{padding:20px;border-radius:24px}
-      .hero h2{font-size:28px}
-      .card{padding:15px;border-radius:20px}
-      .interest-grid{grid-template-columns:repeat(3,1fr)}
-      .facts{grid-template-columns:1fr 1fr}
-      .fact:last-child{grid-column:1/-1}
-    }
-
-    @media (max-width:370px){
-      .grid-2{grid-template-columns:1fr}
-      .interest-grid{grid-template-columns:repeat(2,1fr)}
-      .summary-grid{grid-template-columns:1fr}
-      .brand p{display:none}
-    }
+    .map-btn{display:inline-block; margin-top:12px; padding:8px 12px; background:white; border:1px solid var(--accent); color:var(--accent-dark); border-radius:10px; text-decoration:none; font-size:12px; font-weight:bold;}
   </style>
 </head>
 <body>
@@ -283,1015 +69,299 @@
     <header class="topbar">
       <div class="brand">
         <div class="brand-mark">🧳</div>
-        <div>
-          <h1>WeekAway</h1>
-          <p>Simple ideas for your time off</p>
-        </div>
+        <h1>WeekAway</h1>
       </div>
-      <button class="icon-btn" id="settingsBtn" aria-label="Open settings" title="Settings">⚙️</button>
     </header>
 
     <section class="hero">
-      <div class="eyebrow">Smart time-off planner</div>
       <h2>Turn your days off into an actual plan.</h2>
-      <p>Pick your budget, travel style, weather, and must-do interests. WeekAway matches destinations, checks near-term weather, finds things to do, and lays out each day.</p>
+      <p>Enter your time off and starting ZIP. We'll find cities within driving range and pull live events to build a daily itinerary.</p>
     </section>
 
     <main>
       <section class="card">
-        <div class="section-head">
-          <div>
-            <h3>Where and when?</h3>
-            <p>Your ZIP is remembered only on this device.</p>
-          </div>
-          <span class="step">1</span>
+        <div class="section-head"><h3>1. Where and when?</h3><span class="step">1</span></div>
+        <div class="zip-row">
+          <input id="zipInput" inputmode="numeric" maxlength="5" placeholder="Home ZIP code" value="98660" />
+          <button class="small-btn" id="checkZipBtn" type="button">Check</button>
         </div>
-
-        <label class="field">
-          <span class="field-title">Starting ZIP code</span>
-          <div class="zip-row">
-            <input id="zipInput" inputmode="numeric" maxlength="5" placeholder="Enter ZIP" autocomplete="postal-code" />
-            <button class="small-btn" id="checkZipBtn" type="button">Check</button>
-          </div>
-          <div id="locationNote" class="location-note">Enter a U.S. ZIP code.</div>
-        </label>
-
-        <div class="grid-2" style="margin-top:12px">
-          <label class="field">
-            <span class="field-title">First day off</span>
-            <input id="startDate" type="date" />
-          </label>
-          <label class="field">
-            <span class="field-title">How long?</span>
+        <div class="grid-2">
+          <label class="field"><span class="field-title">First day off</span><input id="startDate" type="date" /></label>
+          <label class="field"><span class="field-title">How many days?</span>
             <select id="duration">
-              <option value="1">One day</option>
-              <option value="2">Overnight · 2 days</option>
-              <option value="3">3 days</option>
+              <option value="2">2 days</option>
+              <option value="3" selected>3 days</option>
               <option value="4">4 days</option>
               <option value="5">5 days</option>
-              <option value="7" selected>One week · 7 days</option>
-              <option value="10">10 days</option>
-              <option value="14">Two weeks · 14 days</option>
+              <option value="7">7 days</option>
             </select>
           </label>
         </div>
-      </section>
-
-      <section class="card">
-        <div class="section-head">
-          <div>
-            <h3>Money and travel</h3>
-            <p>Choose every travel method you would consider.</p>
-          </div>
-          <span class="step">2</span>
-        </div>
-
-        <span class="field-title">Daily spending target</span>
-        <div class="chip-grid" id="budgetChoices">
-          <button class="choice" data-group="budget" data-value="0-50" type="button">$0–$50</button>
-          <button class="choice active" data-group="budget" data-value="50-100" type="button">$50–$100</button>
-          <button class="choice" data-group="budget" data-value="100-175" type="button">$100–$175</button>
-          <button class="choice" data-group="budget" data-value="175-300" type="button">$175+</button>
-        </div>
-
-        <span class="field-title" style="margin-top:15px">Ways you are willing to go</span>
-        <div class="chip-grid" id="travelChoices">
-          <button class="choice active" data-group="travel" data-value="local" type="button"><span class="check">✓</span>Local</button>
-          <button class="choice active" data-group="travel" data-value="drive" type="button"><span class="check">✓</span>Drive</button>
-          <button class="choice" data-group="travel" data-value="train" type="button"><span class="check">✓</span>Train</button>
-          <button class="choice" data-group="travel" data-value="bus" type="button"><span class="check">✓</span>Bus</button>
-          <button class="choice" data-group="travel" data-value="fly" type="button"><span class="check">✓</span>Fly</button>
-        </div>
-
-        <div class="conditional" id="driveOptions">
-          <label class="field">
-            <span class="field-title">Longest one-way drive</span>
-            <select id="driveHours">
-              <option value="1.5">About 1½ hours</option>
-              <option value="3" selected>About 3 hours</option>
-              <option value="5">About 5 hours</option>
-              <option value="8">About 8 hours</option>
-              <option value="12">A full driving day</option>
-            </select>
-          </label>
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="section-head">
-          <div>
-            <h3>What sounds good?</h3>
-            <p>Tap everything you actually want included in the plan.</p>
-          </div>
-          <span class="step">3</span>
-        </div>
-
-        <span class="field-title">Preferred weather</span>
-        <div class="chip-grid" id="weatherChoices">
-          <button class="choice active" data-group="weather" data-value="any" type="button">Anything</button>
-          <button class="choice" data-group="weather" data-value="warm" type="button">☀️ Warm</button>
-          <button class="choice" data-group="weather" data-value="cool" type="button">🍃 Cool</button>
-          <button class="choice" data-group="weather" data-value="dry" type="button">🌤️ Mostly dry</button>
-          <button class="choice" data-group="weather" data-value="snow" type="button">❄️ Snowy</button>
-        </div>
-
-        <span class="field-title" style="margin-top:15px">Must-do interests</span>
-        <div class="interest-grid" id="interestChoices">
-          <button class="interest active" data-value="festivals" type="button"><span class="emoji">🎪</span>Festivals & events</button>
-          <button class="interest active" data-value="sights" type="button"><span class="emoji">📸</span>Sights</button>
-          <button class="interest" data-value="outdoors" type="button"><span class="emoji">🌲</span>Outdoors</button>
-          <button class="interest" data-value="fishing" type="button"><span class="emoji">🎣</span>Fishing</button>
-          <button class="interest" data-value="beach" type="button"><span class="emoji">🏖️</span>Beach</button>
-          <button class="interest" data-value="history" type="button"><span class="emoji">🏛️</span>History</button>
-          <button class="interest" data-value="food" type="button"><span class="emoji">🍽️</span>Food</button>
-          <button class="interest" data-value="arts" type="button"><span class="emoji">🎨</span>Arts & museums</button>
-          <button class="interest" data-value="shopping" type="button"><span class="emoji">🛍️</span>Shopping</button>
-          <button class="interest" data-value="family" type="button"><span class="emoji">🎡</span>Family fun</button>
-          <button class="interest" data-value="relax" type="button"><span class="emoji">🌿</span>Relaxing</button>
-          <button class="interest" data-value="shows" type="button"><span class="emoji">🎭</span>Games & shows</button>
-        </div>
-
-        <div class="grid-2" style="margin-top:14px">
-          <label class="field">
-            <span class="field-title">Trip pace</span>
-            <select id="pace">
-              <option value="relaxed">Relaxed</option>
-              <option value="balanced" selected>Balanced</option>
-              <option value="packed">Fit in a lot</option>
-            </select>
-          </label>
-          <label class="field">
-            <span class="field-title">Travelers</span>
-            <select id="travelers">
-              <option value="1">1 person</option>
-              <option value="2" selected>2 people</option>
-              <option value="3">3 people</option>
-              <option value="4">4 people</option>
-              <option value="5">5+ people</option>
-            </select>
-          </label>
-        </div>
-
-        <button class="plan-btn" id="planBtn" type="button">Plan my time off</button>
-        <p class="mini-note">Forecasts are live for near-term trips. Costs and travel times are rough planning estimates, not quotes.</p>
+        <button class="plan-btn" id="planBtn" type="button">Find Destinations</button>
       </section>
 
       <section id="loadingCard" class="card hidden">
-        <div class="loading"><div class="spinner"></div><b id="loadingTitle">Finding good matches…</b><div id="loadingText" style="margin-top:5px">Checking places, distance, and weather.</div></div>
+        <div class="loading"><b>Calculating drive times and finding spots...</b></div>
       </section>
 
       <section id="resultsCard" class="card hidden">
-        <div class="result-intro">
-          <div>
-            <h2>Your best matches</h2>
-            <p id="resultSummary">Built around the things you selected.</p>
-          </div>
-          <button class="ghost-btn" id="editBtn" type="button">Edit choices</button>
-        </div>
+        <h3>Top reachable destinations</h3>
         <div id="tripList" class="trip-list"></div>
       </section>
 
       <section id="detailCard" class="card hidden">
-        <div class="detail-title">
-          <div>
-            <h2 id="detailName">Your trip</h2>
-            <p id="detailMeta"></p>
-          </div>
-          <a class="route-link" id="routeLink" href="#" target="_blank" rel="noopener">Route ↗</a>
-        </div>
-
-        <div id="weatherStrip" class="weather-strip"></div>
-
-        <h3 class="subhead">Choose what goes into the trip</h3>
-        <p class="subcopy">The day-by-day plan below changes immediately when you check or uncheck an activity.</p>
+        <h2 id="detailName">Your Trip</h2>
+        
+        <h3>Choose your stops</h3>
+        <p style="font-size:12px; color:var(--muted);">Check the live events you want to do. The itinerary below updates automatically.</p>
         <div id="activityList" class="activity-list"></div>
 
-        <h3 class="subhead">Festivals and events</h3>
-        <p class="subcopy" id="eventCopy">Live event results can be added directly to the itinerary.</p>
-        <div id="eventArea"></div>
-
-        <h3 class="subhead">Your day-by-day plan</h3>
+        <h3>Your Day-by-Day Itinerary</h3>
         <div id="timeline" class="timeline"></div>
-
-        <div class="summary-box">
-          <div class="summary-grid">
-            <div class="summary-item"><b id="totalEstimate">—</b><span>rough trip spend</span></div>
-            <div class="summary-item"><b id="travelEstimate">—</b><span>travel estimate</span></div>
-            <div class="summary-item"><b id="activityCount">—</b><span>chosen activities</span></div>
-          </div>
-          <div class="action-row">
-            <button class="secondary-small" id="copyBtn" type="button">Copy plan</button>
-            <button class="primary-small" id="saveBtn" type="button">Save on phone</button>
-          </div>
-        </div>
       </section>
     </main>
-
-    <footer>
-      Weather: Open-Meteo · ZIP lookup: Zippopotam.us · Nearby places: OpenStreetMap contributors · Events: Ticketmaster when connected.<br />Always confirm hours, tickets, road conditions, transportation schedules, and total prices before leaving.
-    </footer>
   </div>
 
-  <dialog id="settingsDialog">
-    <div class="modal">
-      <div class="modal-head">
-        <h3>Optional live events</h3>
-        <button class="close-btn" id="closeSettings" type="button" aria-label="Close settings">✕</button>
-      </div>
-      <label class="field">
-        <span class="field-title">Ticketmaster Discovery API key</span>
-        <input id="ticketmasterKey" type="password" placeholder="Paste key here" autocomplete="off" />
-      </label>
-      <p class="setting-note">The app works without a key. Adding one lets it pull live festivals, concerts, sports, and family events near each suggestion. The key stays in this browser. For a public production app, protect keys behind a serverless function instead of placing them in the page.</p>
-      <button class="plan-btn" id="saveSettings" type="button" style="margin-top:2px">Save setting</button>
-    </div>
-  </dialog>
-
-  <div id="toast" class="toast"></div>
-
   <script>
-    "use strict";
+    const $ = id => document.getElementById(id);
+    const state = { home: null, trips: [], selectedTrip: null, activities: [] };
 
-    const $ = (id) => document.getElementById(id);
-    const state = {
-      home: null,
-      budget: "50-100",
-      travel: new Set(["local", "drive"]),
-      weather: "any",
-      interests: new Set(["festivals", "sights"]),
-      trips: [],
-      selectedTrip: null,
-      activities: [],
-      events: [],
-      weatherDays: []
-    };
+    // --- API KEY CONFIGURATION ---
+    const RAPIDAPI_KEY = "4f3d72ba99msh46ebd202698d24cp150a68jsn77e532ce574c";
 
-    const BUDGETS = {
-      "0-50": { min: 0, max: 50, mid: 38, tier: 1, label: "$0–$50/day" },
-      "50-100": { min: 50, max: 100, mid: 78, tier: 2, label: "$50–$100/day" },
-      "100-175": { min: 100, max: 175, mid: 138, tier: 3, label: "$100–$175/day" },
-      "175-300": { min: 175, max: 300, mid: 230, tier: 4, label: "$175+/day" }
-    };
+    // Format helpers
+    const dateOnly = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const addDays = (d, n) => { const nd = new Date(d); nd.setDate(nd.getDate() + n); return nd; };
+    const shortDate = d => new Intl.DateTimeFormat("en-US",{weekday:"short", month:"short", day:"numeric"}).format(d);
 
-    const INTERESTS = {
-      festivals: { label: "Festivals & events", icon: "🎪" },
-      sights: { label: "Sights", icon: "📸" },
-      outdoors: { label: "Outdoors", icon: "🌲" },
-      fishing: { label: "Fishing", icon: "🎣" },
-      beach: { label: "Beach", icon: "🏖️" },
-      history: { label: "History", icon: "🏛️" },
-      food: { label: "Food", icon: "🍽️" },
-      arts: { label: "Arts & museums", icon: "🎨" },
-      shopping: { label: "Shopping", icon: "🛍️" },
-      family: { label: "Family fun", icon: "🎡" },
-      relax: { label: "Relaxing", icon: "🌿" },
-      shows: { label: "Games & shows", icon: "🎭" }
-    };
-
-    const DESTINATIONS = [
-      {name:"Portland",state:"OR",lat:45.5152,lon:-122.6784,cost:2,tags:["food","arts","sights","shopping","festivals","outdoors"],climate:["cool"]},
-      {name:"Seattle",state:"WA",lat:47.6062,lon:-122.3321,cost:3,tags:["sights","food","arts","shopping","festivals","shows","family"],climate:["cool"]},
-      {name:"Tacoma",state:"WA",lat:47.2529,lon:-122.4443,cost:2,tags:["arts","history","sights","family","festivals"],climate:["cool"]},
-      {name:"Olympia",state:"WA",lat:47.0379,lon:-122.9007,cost:2,tags:["outdoors","history","food","sights","festivals"],climate:["cool"]},
-      {name:"Astoria",state:"OR",lat:46.1879,lon:-123.8313,cost:2,tags:["history","sights","food","outdoors","fishing"],climate:["cool"]},
-      {name:"Cannon Beach",state:"OR",lat:45.8918,lon:-123.9615,cost:3,tags:["beach","sights","relax","food","outdoors"],climate:["cool"]},
-      {name:"Hood River",state:"OR",lat:45.7054,lon:-121.5215,cost:2,tags:["outdoors","sights","food","relax","festivals"],climate:["dry","cool"]},
-      {name:"Bend",state:"OR",lat:44.0582,lon:-121.3153,cost:3,tags:["outdoors","sights","food","fishing","festivals"],climate:["dry","snow"]},
-      {name:"Leavenworth",state:"WA",lat:47.5962,lon:-120.6615,cost:3,tags:["festivals","sights","outdoors","food","shopping","family"],climate:["snow","dry"]},
-      {name:"Spokane",state:"WA",lat:47.6588,lon:-117.4260,cost:2,tags:["sights","outdoors","food","family","festivals"],climate:["dry","snow"]},
-      {name:"Boise",state:"ID",lat:43.6150,lon:-116.2023,cost:2,tags:["outdoors","food","sights","festivals","family"],climate:["dry","warm"]},
-      {name:"Coeur d'Alene",state:"ID",lat:47.6777,lon:-116.7805,cost:3,tags:["outdoors","fishing","relax","sights","family"],climate:["snow","warm"]},
-      {name:"San Francisco",state:"CA",lat:37.7749,lon:-122.4194,cost:4,tags:["sights","food","arts","history","shopping","festivals","shows"],climate:["cool","dry"]},
-      {name:"Monterey",state:"CA",lat:36.6002,lon:-121.8947,cost:4,tags:["beach","family","sights","history","relax","food"],climate:["cool","dry"]},
-      {name:"Sacramento",state:"CA",lat:38.5816,lon:-121.4944,cost:3,tags:["history","food","arts","festivals","family"],climate:["warm","dry"]},
-      {name:"Los Angeles",state:"CA",lat:34.0522,lon:-118.2437,cost:4,tags:["sights","beach","food","arts","shopping","shows","family","festivals"],climate:["warm","dry"]},
-      {name:"San Diego",state:"CA",lat:32.7157,lon:-117.1611,cost:4,tags:["beach","family","sights","food","relax","festivals"],climate:["warm","dry"]},
-      {name:"Palm Springs",state:"CA",lat:33.8303,lon:-116.5453,cost:4,tags:["relax","sights","shopping","outdoors","arts"],climate:["warm","dry"]},
-      {name:"Las Vegas",state:"NV",lat:36.1699,lon:-115.1398,cost:3,tags:["shows","food","shopping","sights","festivals"],climate:["warm","dry"]},
-      {name:"Reno",state:"NV",lat:39.5296,lon:-119.8138,cost:2,tags:["shows","outdoors","sights","food","festivals"],climate:["dry","snow"]},
-      {name:"Salt Lake City",state:"UT",lat:40.7608,lon:-111.8910,cost:3,tags:["outdoors","history","sights","family","festivals"],climate:["dry","snow"]},
-      {name:"Moab",state:"UT",lat:38.5733,lon:-109.5498,cost:3,tags:["outdoors","sights","relax","family"],climate:["warm","dry"]},
-      {name:"Phoenix",state:"AZ",lat:33.4484,lon:-112.0740,cost:3,tags:["warm","outdoors","food","arts","shopping","sights"],climate:["warm","dry"]},
-      {name:"Sedona",state:"AZ",lat:34.8697,lon:-111.7610,cost:4,tags:["outdoors","sights","relax","arts"],climate:["warm","dry"]},
-      {name:"Santa Fe",state:"NM",lat:35.6870,lon:-105.9378,cost:3,tags:["arts","history","food","shopping","sights","festivals"],climate:["dry","snow"]},
-      {name:"Denver",state:"CO",lat:39.7392,lon:-104.9903,cost:3,tags:["outdoors","food","arts","shows","festivals","family"],climate:["dry","snow"]},
-      {name:"Colorado Springs",state:"CO",lat:38.8339,lon:-104.8214,cost:2,tags:["outdoors","sights","family","history"],climate:["dry","snow"]},
-      {name:"Austin",state:"TX",lat:30.2672,lon:-97.7431,cost:3,tags:["food","shows","festivals","outdoors","arts"],climate:["warm"]},
-      {name:"San Antonio",state:"TX",lat:29.4241,lon:-98.4936,cost:2,tags:["history","food","family","sights","festivals"],climate:["warm"]},
-      {name:"Dallas",state:"TX",lat:32.7767,lon:-96.7970,cost:3,tags:["food","shopping","arts","shows","family","festivals"],climate:["warm"]},
-      {name:"New Orleans",state:"LA",lat:29.9511,lon:-90.0715,cost:3,tags:["food","history","festivals","arts","sights","shows"],climate:["warm"]},
-      {name:"Nashville",state:"TN",lat:36.1627,lon:-86.7816,cost:3,tags:["shows","food","history","festivals","sights"],climate:["warm"]},
-      {name:"Memphis",state:"TN",lat:35.1495,lon:-90.0490,cost:2,tags:["history","food","shows","arts","sights"],climate:["warm"]},
-      {name:"Chicago",state:"IL",lat:41.8781,lon:-87.6298,cost:3,tags:["sights","food","arts","shopping","festivals","shows","family"],climate:["cool","snow"]},
-      {name:"Milwaukee",state:"WI",lat:43.0389,lon:-87.9065,cost:2,tags:["festivals","food","arts","history","family"],climate:["cool","snow"]},
-      {name:"Minneapolis",state:"MN",lat:44.9778,lon:-93.2650,cost:3,tags:["arts","outdoors","shopping","food","festivals","family"],climate:["cool","snow"]},
-      {name:"St. Louis",state:"MO",lat:38.6270,lon:-90.1994,cost:2,tags:["family","history","food","sights","arts"],climate:["warm","cool"]},
-      {name:"Kansas City",state:"MO",lat:39.0997,lon:-94.5786,cost:2,tags:["food","shows","history","arts","family","festivals"],climate:["warm","cool"]},
-      {name:"Savannah",state:"GA",lat:32.0809,lon:-81.0912,cost:3,tags:["history","sights","food","relax","arts"],climate:["warm"]},
-      {name:"Charleston",state:"SC",lat:32.7765,lon:-79.9311,cost:4,tags:["history","food","beach","sights","relax"],climate:["warm"]},
-      {name:"Orlando",state:"FL",lat:28.5383,lon:-81.3792,cost:4,tags:["family","shows","shopping","festivals"],climate:["warm"]},
-      {name:"Miami",state:"FL",lat:25.7617,lon:-80.1918,cost:4,tags:["beach","food","arts","shopping","festivals","sights"],climate:["warm"]},
-      {name:"Washington",state:"DC",lat:38.9072,lon:-77.0369,cost:3,tags:["history","sights","arts","family","festivals"],climate:["warm","cool"]},
-      {name:"Philadelphia",state:"PA",lat:39.9526,lon:-75.1652,cost:3,tags:["history","food","arts","sights","festivals"],climate:["cool","warm"]},
-      {name:"New York City",state:"NY",lat:40.7128,lon:-74.0060,cost:4,tags:["sights","food","arts","shopping","shows","festivals","history"],climate:["cool","warm"]},
-      {name:"Boston",state:"MA",lat:42.3601,lon:-71.0589,cost:4,tags:["history","sights","food","arts","festivals"],climate:["cool","snow"]},
-      {name:"Portland",state:"ME",lat:43.6591,lon:-70.2568,cost:3,tags:["food","sights","outdoors","history","relax"],climate:["cool","snow"]},
-      {name:"Asheville",state:"NC",lat:35.5951,lon:-82.5515,cost:3,tags:["outdoors","food","arts","festivals","relax"],climate:["cool","warm"]},
-      {name:"Anchorage",state:"AK",lat:61.2181,lon:-149.9003,cost:4,tags:["outdoors","sights","fishing","family"],climate:["cool","snow"]},
-      {name:"Honolulu",state:"HI",lat:21.3099,lon:-157.8581,cost:4,tags:["beach","sights","food","outdoors","relax","history"],climate:["warm"]}
-    ];
-
-    const SAFE_EVENT_BLOCKLIST = /casino|poker|sportsbook|betting|bar crawl|wine tasting|beer festival|whiskey|bourbon|21\+|adult entertainment/i;
-
-    function escapeHtml(value = "") {
-      return String(value).replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[c]);
+    async function fetchJSON(url, options = {}) {
+      const res = await fetch(url, options);
+      if(!res.ok) throw new Error("Network error");
+      return await res.json();
     }
 
-    function toRad(deg){ return deg * Math.PI / 180; }
-    function distanceMiles(aLat,aLon,bLat,bLon){
-      const R = 3958.8;
-      const dLat = toRad(bLat-aLat), dLon = toRad(bLon-aLon);
-      const x = Math.sin(dLat/2)**2 + Math.cos(toRad(aLat))*Math.cos(toRad(bLat))*Math.sin(dLon/2)**2;
-      return R * 2 * Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
-    }
-
-    function formatMoney(n){
-      return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(Math.max(0,n));
-    }
-
-    function dateOnly(date){
-      const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,"0"),d=String(date.getDate()).padStart(2,"0");
-      return `${y}-${m}-${d}`;
-    }
-
-    function parseLocalDate(str){
-      const [y,m,d]=str.split("-").map(Number);
-      return new Date(y,m-1,d,12,0,0,0);
-    }
-
-    function addDays(date,days){ const d=new Date(date); d.setDate(d.getDate()+days); return d; }
-    function shortDate(date){ return new Intl.DateTimeFormat("en-US",{weekday:"short",month:"short",day:"numeric"}).format(date); }
-    function longDate(date){ return new Intl.DateTimeFormat("en-US",{weekday:"long",month:"short",day:"numeric"}).format(date); }
-
-    function toast(message){
-      const el=$("toast"); el.textContent=message; el.classList.add("show");
-      clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove("show"),2200);
-    }
-
-    function updateDriveVisibility(){
-      $("driveOptions").classList.toggle("hidden",!state.travel.has("drive"));
-    }
-
-    async function fetchJSON(url, cacheKey, ttlMs=0){
-      if(cacheKey && ttlMs){
-        try{
-          const saved=JSON.parse(localStorage.getItem(cacheKey)||"null");
-          if(saved && Date.now()-saved.time < ttlMs) return saved.data;
-        }catch(_){ }
-      }
-      const controller=new AbortController();
-      const timer=setTimeout(()=>controller.abort(),13000);
-      try{
-        const res=await fetch(url,{signal:controller.signal});
-        if(!res.ok) throw new Error(`Request failed (${res.status})`);
-        const data=await res.json();
-        if(cacheKey && ttlMs){
-          try{localStorage.setItem(cacheKey,JSON.stringify({time:Date.now(),data}));}catch(_){ }
-        }
-        return data;
-      }finally{ clearTimeout(timer); }
-    }
-
-    async function lookupZip(showError=true){
-      const zip=$("zipInput").value.trim();
-      const note=$("locationNote");
-      if(!/^\d{5}$/.test(zip)){
-        state.home=null;
-        note.textContent="Please enter a 5-digit U.S. ZIP code.";
-        note.className="location-note bad";
-        return null;
-      }
-      note.textContent="Checking ZIP…"; note.className="location-note";
-      try{
-        const data=await fetchJSON(`https://api.zippopotam.us/us/${encodeURIComponent(zip)}`,`weekaway-zip-${zip}`,1000*60*60*24*30);
-        const p=data.places && data.places[0];
-        if(!p) throw new Error("ZIP not found");
-        state.home={
-          zip,
-          city:p["place name"],
-          state:p["state abbreviation"],
-          lat:Number(p.latitude),
-          lon:Number(p.longitude)
-        };
-        localStorage.setItem("weekaway-home-zip",zip);
-        note.textContent=`Starting near ${state.home.city}, ${state.home.state}`;
-        note.className="location-note good";
-        return state.home;
-      }catch(err){
-        state.home=null;
-        note.textContent="That ZIP could not be found. Check it and try again.";
-        note.className="location-note bad";
-        if(showError) toast("ZIP code not found");
-        return null;
+    async function lookupZip() {
+      const zip = $("zipInput").value.trim();
+      try {
+        const data = await fetchJSON(`https://api.zippopotam.us/us/${zip}`);
+        state.home = { lat: Number(data.places[0].latitude), lon: Number(data.places[0].longitude), city: data.places[0]["place name"] };
+        $("checkZipBtn").textContent = "Verified!";
+      } catch(e) {
+        $("checkZipBtn").textContent = "Error";
       }
     }
 
-    function modeForDistance(miles){
-      const driveLimit=Number($("driveHours").value)*55;
-      const options=[];
-      if(state.travel.has("local") && miles<=35) options.push({mode:"Local",time:miles<8?"nearby":`${Math.max(15,Math.round(miles*2.1))} min`,cost:0,rank:10});
-      if(state.travel.has("drive") && miles<=driveLimit) options.push({mode:"Drive",time:`${Math.max(1,Math.round((miles/52)*10)/10)} hr`,cost:miles*2*.16,rank:9});
-      if(state.travel.has("train") && miles>=25 && miles<=650) options.push({mode:"Train",time:`about ${Math.max(1.5,Math.round((miles/48+.75)*2)/2)} hr`,cost:Math.max(28,miles*.19),rank:7});
-      if(state.travel.has("bus") && miles>=20 && miles<=480) options.push({mode:"Bus",time:`about ${Math.max(1.5,Math.round((miles/42+1)*2)/2)} hr`,cost:Math.max(20,miles*.11),rank:6});
-      if(state.travel.has("fly") && miles>=180) options.push({mode:"Fly",time:`about ${Math.max(3,Math.round((miles/500+2.4)*2)/2)} hr`,cost:Math.max(180,120+miles*.18),rank:8});
-      if(!options.length) return null;
-      options.sort((a,b)=>b.rank-a.rank || a.cost-b.cost);
-      return options[0];
+    // Distance calculation (Haversine formula)
+    function distanceMiles(lat1, lon1, lat2, lon2) {
+      const R = 3958.8; 
+      const dLat = (lat2-lat1)*Math.PI/180;
+      const dLon = (lon2-lon1)*Math.PI/180;
+      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     }
 
-    function weatherEmoji(code){
-      if(code===0) return "☀️";
-      if([1,2].includes(code)) return "🌤️";
-      if(code===3) return "☁️";
-      if([45,48].includes(code)) return "🌫️";
-      if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return "🌧️";
-      if([71,73,75,77,85,86].includes(code)) return "❄️";
-      if([95,96,99].includes(code)) return "⛈️";
-      return "🌤️";
-    }
-
-    function weatherLabel(code){
-      if(code===0) return "Clear";
-      if([1,2].includes(code)) return "Partly cloudy";
-      if(code===3) return "Cloudy";
-      if([45,48].includes(code)) return "Foggy";
-      if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return "Rain possible";
-      if([71,73,75,77,85,86].includes(code)) return "Snow possible";
-      if([95,96,99].includes(code)) return "Storm possible";
-      return "Mixed";
-    }
-
-    function forecastWindowIsAvailable(){
-      const start=parseLocalDate($("startDate").value);
-      const today=new Date(); today.setHours(12,0,0,0);
-      const diff=Math.floor((start-today)/86400000);
-      const duration=Number($("duration").value);
-      return diff>=0 && diff+duration<=16;
-    }
-
-    async function getForecast(place){
-      if(!forecastWindowIsAvailable()) return null;
-      const start=parseLocalDate($("startDate").value);
-      const days=Number($("duration").value);
-      const end=addDays(start,days-1);
-      const params=new URLSearchParams({
-        latitude:String(place.lat),longitude:String(place.lon),
-        daily:"weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max",
-        temperature_unit:"fahrenheit",timezone:"auto",start_date:dateOnly(start),end_date:dateOnly(end)
-      });
-      try{
-        const data=await fetchJSON(`https://api.open-meteo.com/v1/forecast?${params}`,`weekaway-wx-${place.lat.toFixed(2)}-${place.lon.toFixed(2)}-${dateOnly(start)}-${days}`,1000*60*60);
-        const d=data.daily;
-        if(!d || !d.time) return null;
-        return d.time.map((date,i)=>({
-          date,
-          code:d.weather_code[i],
-          high:Math.round(d.temperature_2m_max[i]),
-          low:Math.round(d.temperature_2m_min[i]),
-          rain:Math.round(d.precipitation_probability_max[i]||0)
-        }));
-      }catch(_){ return null; }
-    }
-
-    async function nearbyCities(home,radiusMiles){
-      const radiusMeters=Math.min(800000,Math.max(40000,Math.round(radiusMiles*1609.34)));
-      const query=`[out:json][timeout:18];nwr(around:${radiusMeters},${home.lat},${home.lon})["place"~"city|town"]["name"];out center tags 65;`;
-      const url=`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-      try{
-        const data=await fetchJSON(url,`weekaway-cities-${home.zip}-${Math.round(radiusMiles)}`,1000*60*60*24*5);
-        return (data.elements||[]).map(el=>{
-          const lat=el.lat ?? el.center?.lat;
-          const lon=el.lon ?? el.center?.lon;
-          if(!lat || !lon || !el.tags?.name) return null;
-          const pop=Number(String(el.tags.population||"0").replace(/\D/g,""))||0;
-          return {
-            name:el.tags.name,
-            state:el.tags["addr:state"] || el.tags["is_in:state_code"] || "",
-            lat:Number(lat),lon:Number(lon),cost:pop>500000?3:2,
-            tags:["sights","food","outdoors","festivals","history","relax"],
-            climate:[],source:"nearby",population:pop
-          };
-        }).filter(Boolean);
-      }catch(_){ return []; }
-    }
-
-    function dedupePlaces(items){
-      const seen=new Set();
-      return items.filter(p=>{
-        const key=`${p.name.toLowerCase()}-${p.state.toLowerCase()}`;
-        if(seen.has(key)) return false;
-        seen.add(key); return true;
-      });
-    }
-
-    function selectedInterestLabels(){
-      return [...state.interests].map(k=>INTERESTS[k]?.label).filter(Boolean);
-    }
-
-    function scoreTrip(place,forecast){
-      const distance=distanceMiles(state.home.lat,state.home.lon,place.lat,place.lon);
-      const transport=modeForDistance(distance);
-      if(!transport) return null;
-      const duration=Number($("duration").value);
-      const budget=BUDGETS[state.budget];
-      let score=45;
-      const matches=[...state.interests].filter(i=>place.tags.includes(i));
-      score+=matches.length*7;
-      score-=Math.max(0,place.cost-budget.tier)*8;
-      if(place.cost<=budget.tier) score+=5;
-      if(transport.mode==="Fly" && duration<3) score-=22;
-      if(transport.mode==="Drive" && distance>duration*150) score-=8;
-      if(transport.mode==="Local" && duration>5) score-=4;
-      if(place.source==="home") score+=state.travel.has("local")?4:-20;
-      if(place.source==="nearby") score+=3;
-
-      let weatherText="Seasonal match";
-      if(forecast?.length){
-        const avgHigh=forecast.reduce((s,d)=>s+d.high,0)/forecast.length;
-        const avgRain=forecast.reduce((s,d)=>s+d.rain,0)/forecast.length;
-        const snowy=forecast.some(d=>[71,73,75,77,85,86].includes(d.code));
-        weatherText=`Avg high ${Math.round(avgHigh)}° · ${Math.round(avgRain)}% rain`;
-        if(state.weather==="warm") score+=avgHigh>=70?12:avgHigh>=62?4:-10;
-        if(state.weather==="cool") score+=avgHigh<=68?12:avgHigh<=76?3:-8;
-        if(state.weather==="dry") score+=avgRain<=25?12:avgRain<=45?3:-9;
-        if(state.weather==="snow") score+=snowy?14:-8;
-      }else if(state.weather!=="any"){
-        score+=place.climate.includes(state.weather)?9:0;
-      }
-
-      const dailyLow=budget.min*duration;
-      const dailyHigh=budget.max*duration;
-      const lodgingNights=transport.mode==="Local"?0:Math.max(0,duration-1);
-      const lodgingExtra=transport.mode==="Local"?0:lodgingNights*Math.max(0,(place.cost-budget.tier))*35;
-      const totalLow=dailyLow+transport.cost+lodgingExtra;
-      const totalHigh=dailyHigh+transport.cost+lodgingExtra;
-      score=Math.max(20,Math.min(98,Math.round(score)));
-      return {...place,distance,transport,forecast,score,matches,weatherText,totalLow,totalHigh};
-    }
-
-    function reasonForTrip(trip){
-      const labels=trip.matches.slice(0,3).map(k=>INTERESTS[k].label.toLowerCase());
-      const interestText=labels.length?labels.join(", "):"a flexible mix of activities";
-      const budgetFit=trip.cost<=BUDGETS[state.budget].tier?"fits the spending level":"works best near the upper end of the budget";
-      return `${trip.transport.mode} makes sense for this distance, it ${budgetFit}, and it is a strong match for ${interestText}.`;
-    }
-
-    function transportIcon(mode){ return ({Local:"📍",Drive:"🚗",Train:"🚆",Bus:"🚌",Fly:"✈️"})[mode]||"🧳"; }
-
-    async function buildTripMatches(){
-      if(!state.home && !await lookupZip(false)){
-        $("zipInput").focus(); toast("Enter a valid ZIP code first"); return;
-      }
-      if(state.interests.size===0){ toast("Choose at least one thing you want to do"); return; }
-      if(state.travel.size===0){ toast("Choose at least one way to travel"); return; }
-
-      const btn=$("planBtn"); btn.disabled=true; btn.textContent="Building your plan…";
+    async function buildTripMatches() {
+      if(!state.home) await lookupZip();
+      
+      $("planBtn").textContent = "Searching...";
       $("loadingCard").classList.remove("hidden");
       $("resultsCard").classList.add("hidden");
       $("detailCard").classList.add("hidden");
-      $("loadingTitle").textContent="Finding good matches…";
-      $("loadingText").textContent="Checking distance, budget, interests, and weather.";
-      $("loadingCard").scrollIntoView({behavior:"smooth",block:"center"});
 
-      try{
-        const driveRadius=state.travel.has("drive")?Number($("driveHours").value)*55:45;
-        const nearby=await nearbyCities(state.home,Math.max(50,driveRadius));
-        const homePlace={name:state.home.city,state:state.home.state,lat:state.home.lat,lon:state.home.lon,cost:1,tags:["sights","food","outdoors","festivals","history","relax","shopping","arts","family","shows"],climate:[],source:"home"};
-        let candidates=dedupePlaces([homePlace,...nearby,...DESTINATIONS]);
-        candidates=candidates.map(p=>({...p,distance:distanceMiles(state.home.lat,state.home.lon,p.lat,p.lon)}))
-          .filter(p=>modeForDistance(p.distance))
-          .sort((a,b)=>{
-            const aLocal=a.source==="home"?1:0,bLocal=b.source==="home"?1:0;
-            return bLocal-aLocal || (b.population||0)-(a.population||0) || a.distance-b.distance;
-          });
+      // Find Cities via OpenStreetMap Overpass API based on time off
+      const days = Number($("duration").value);
+      const maxRadius = Math.min(300, days * 60); 
+      const radiusMeters = maxRadius * 1609.34;
+      const query = `[out:json][timeout:15];nwr(around:${radiusMeters},${state.home.lat},${state.home.lon})["place"~"city|town"]["population"];out center 10;`;
+      
+      try {
+        const data = await fetchJSON(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`);
+        
+        state.trips = data.elements.map(el => {
+          const lat = el.lat ?? el.center?.lat;
+          const lon = el.lon ?? el.center?.lon;
+          return {
+            name: el.tags.name,
+            lat: lat, lon: lon,
+            distance: distanceMiles(state.home.lat, state.home.lon, lat, lon)
+          };
+        }).filter(t => t.name && t.distance > 20).sort((a,b) => a.distance - b.distance).slice(0, 4);
 
-        const preliminary=candidates.slice(0,18);
-        $("loadingText").textContent="Checking live forecasts for the strongest candidates.";
-        const forecastCandidates=preliminary.slice(0,8);
-        const forecasts=await Promise.all(forecastCandidates.map(getForecast));
-        const forecastMap=new Map(forecastCandidates.map((p,i)=>[`${p.name}|${p.state}`,forecasts[i]]));
-        const scored=preliminary.map(p=>scoreTrip(p,forecastMap.get(`${p.name}|${p.state}`))).filter(Boolean);
-
-        // Also score curated fly destinations that may not have been among the closest 18.
-        const farPool=DESTINATIONS.filter(p=>state.travel.has("fly") && distanceMiles(state.home.lat,state.home.lon,p.lat,p.lon)>180)
-          .map(p=>scoreTrip(p,null)).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,5);
-
-        state.trips=dedupePlaces([...scored,...farPool]).sort((a,b)=>b.score-a.score || a.totalLow-b.totalLow).slice(0,5);
-        if(!state.trips.length) throw new Error("No matches found");
-        renderTripMatches();
+        renderTrips();
         $("loadingCard").classList.add("hidden");
         $("resultsCard").classList.remove("hidden");
-        $("resultSummary").textContent=`From ${state.home.city} · ${$("duration").selectedOptions[0].textContent} · ${BUDGETS[state.budget].label}`;
-        $("resultsCard").scrollIntoView({behavior:"smooth",block:"start"});
-        await selectTrip(0);
-      }catch(err){
-        console.error(err);
-        $("loadingCard").classList.add("hidden");
-        toast("I could not finish the live lookup. Please try again.");
-      }finally{
-        btn.disabled=false; btn.textContent="Plan my time off";
+        $("planBtn").textContent = "Find Destinations";
+        
+      } catch (err) {
+        $("loadingCard").innerHTML = "<div class='loading'><b>Error finding cities. Try again.</b></div>";
+        $("planBtn").textContent = "Find Destinations";
       }
     }
 
-    function renderTripMatches(){
-      $("tripList").innerHTML=state.trips.map((trip,index)=>{
-        const tags=trip.matches.length?trip.matches.slice(0,4):trip.tags.slice(0,4);
-        return `<article class="trip-card ${index===0?"selected":""}" data-index="${index}" tabindex="0">
-          <div class="trip-top">
-            <div><div class="trip-name">${escapeHtml(trip.name)}${trip.state?`, ${escapeHtml(trip.state)}`:""}</div><div class="trip-sub">${Math.round(trip.distance)} miles away</div></div>
-            <span class="match">${trip.score}% match</span>
+    function renderTrips() {
+      $("tripList").innerHTML = state.trips.map((trip, i) => `
+        <div class="trip-card ${i===0?'selected':''}" data-idx="${i}">
+          <div class="trip-name">${trip.name}</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:4px;">
+            🚗 ${Math.round(trip.distance)} miles away · Est. drive: ${Math.round((trip.distance/55)*10)/10} hrs
           </div>
-          <div class="facts">
-            <div class="fact"><b>${transportIcon(trip.transport.mode)} ${escapeHtml(trip.transport.mode)}</b><span>${escapeHtml(trip.transport.time)}</span></div>
-            <div class="fact"><b>${formatMoney(trip.totalLow)}–${formatMoney(trip.totalHigh)}</b><span>rough total</span></div>
-            <div class="fact"><b>${trip.forecast?.length?weatherEmoji(trip.forecast[0].code):"🌦️"} ${escapeHtml(trip.weatherText)}</b><span>${trip.forecast?.length?"live forecast":"weather estimate"}</span></div>
-          </div>
-          <p class="reason">${escapeHtml(reasonForTrip(trip))}</p>
-          <div class="tag-row">${tags.map(t=>`<span class="tag">${escapeHtml(INTERESTS[t]?.label||t)}</span>`).join("")}</div>
-        </article>`;
-      }).join("");
-      document.querySelectorAll(".trip-card").forEach(card=>{
-        card.addEventListener("click",()=>selectTrip(Number(card.dataset.index)));
-        card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectTrip(Number(card.dataset.index));}});
-      });
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".trip-card").forEach(c => c.addEventListener("click", (e) => {
+        document.querySelectorAll(".trip-card").forEach(card => card.classList.remove("selected"));
+        e.currentTarget.classList.add("selected");
+        selectTrip(Number(e.currentTarget.dataset.idx));
+      }));
     }
 
-    function routeUrl(trip){
-      const origin=encodeURIComponent(`${state.home.city}, ${state.home.state} ${state.home.zip}`);
-      const dest=encodeURIComponent(`${trip.name}, ${trip.state}`);
-      const mode=trip.transport.mode==="Drive"?"driving":trip.transport.mode==="Local"?"driving":trip.transport.mode==="Fly"?"transit":"transit";
-      return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=${mode}`;
+    // --- NEW LIVE EVENTS FETCH FUNCTION WITH LOCAL CACHE ---
+    async function getLiveEvents(city) {
+      const cacheKey = `weekaway-events-${city}`;
+      const cached = localStorage.getItem(cacheKey);
+      
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        // Check if cache is fresh (less than 24 hours old)
+        if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
+          console.log("Loaded from cache, API limit protected!");
+          return parsed.events;
+        }
+      }
+
+      console.log("Fetching fresh events from RapidAPI...");
+      const searchQuery = encodeURIComponent(`events in ${city}`);
+      const url = `https://real-time-events-search.p.rapidapi.com/search-events?query=${searchQuery}&date=any`;
+
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'x-rapidapi-key': RAPIDAPI_KEY,
+            'x-rapidapi-host': 'real-time-events-search.p.rapidapi.com'
+          }
+        });
+        
+        if(!response.ok) throw new Error("API limits reached");
+        
+        const result = await response.json();
+        if (!result.data || result.data.length === 0) return [];
+
+        // Format data for the app
+        const formattedEvents = result.data.slice(0, 8).map((event, index) => ({
+          name: event.name,
+          selected: true,
+          note: event.venue?.name || "Local Event",
+          url: event.link || "#"
+        }));
+
+        // Save safely into the cache
+        localStorage.setItem(cacheKey, JSON.stringify({
+          timestamp: Date.now(),
+          events: formattedEvents
+        }));
+
+        return formattedEvents;
+        
+      } catch (error) {
+        console.error("API Error:", error);
+        return [];
+      }
     }
 
-    async function selectTrip(index){
-      state.selectedTrip=state.trips[index];
-      document.querySelectorAll(".trip-card").forEach((c,i)=>c.classList.toggle("selected",i===index));
-      const trip=state.selectedTrip;
+    async function selectTrip(index) {
+      state.selectedTrip = state.trips[index];
       $("detailCard").classList.remove("hidden");
-      $("detailName").textContent=`${trip.name}${trip.state?`, ${trip.state}`:""}`;
-      $("detailMeta").textContent=`${transportIcon(trip.transport.mode)} ${trip.transport.mode} · ${Math.round(trip.distance)} miles · ${trip.score}% match`;
-      $("routeLink").href=routeUrl(trip);
-      state.weatherDays=trip.forecast || await getForecast(trip) || [];
-      renderWeather();
-      $("activityList").innerHTML='<div class="loading"><div class="spinner"></div>Finding things that match your interests…</div>';
-      $("eventArea").innerHTML="";
-      const [activities,events]=await Promise.all([getActivities(trip),getEvents(trip)]);
-      state.activities=activities;
-      state.events=events;
+      $("detailName").textContent = state.selectedTrip.name;
+      $("activityList").innerHTML = "<div class='loading'><i>Searching RapidAPI for live events...</i></div>";
+      
+      // Call the API with caching protection
+      const liveEvents = await getLiveEvents(state.selectedTrip.name);
+      
+      if (liveEvents.length > 0) {
+        state.activities = liveEvents;
+      } else {
+        // Safe Fallback if API fails or is empty
+        state.activities = [
+          { name: "Explore Downtown", selected: true, note: "Walk the historic main street" },
+          { name: "Local Park", selected: true, note: "Enjoy the outdoors" }
+        ];
+      }
+
       renderActivities();
-      renderEvents();
       renderItinerary();
-      updateSummary();
-      $("detailCard").scrollIntoView({behavior:"smooth",block:"start"});
     }
 
-    function renderWeather(){
-      if(!state.weatherDays.length){
-        $("weatherStrip").innerHTML='<div class="empty" style="width:100%">Live forecasts are available only when the trip falls within the next 16 days. This match uses seasonal weather instead.</div>';
-        return;
-      }
-      $("weatherStrip").innerHTML=state.weatherDays.map(d=>{
-        const date=parseLocalDate(d.date);
-        return `<div class="weather-day"><b>${escapeHtml(shortDate(date))}</b><div class="wx">${weatherEmoji(d.code)}</div><span>${d.high}° / ${d.low}° · ${d.rain}%</span></div>`;
+    function renderActivities() {
+      $("activityList").innerHTML = state.activities.map((a, i) => `
+        <label class="activity-row">
+          <input type="checkbox" data-idx="${i}" ${a.selected ? 'checked' : ''} />
+          <span>
+            <b class="activity-name">${a.name}</b>
+            <span class="activity-note">${a.note}</span>
+          </span>
+        </label>
+      `).join("");
+
+      document.querySelectorAll('.activity-row input').forEach(input => {
+        input.addEventListener("change", (e) => {
+          state.activities[e.target.dataset.idx].selected = e.target.checked;
+          renderItinerary(); // Re-render timeline instantly
+        });
+      });
+    }
+
+    function generateDailyRouteUrl(stops) {
+      if(!stops || stops.length === 0) return "#";
+      const destCity = encodeURIComponent(state.selectedTrip.name);
+      const waypoints = stops.map(stop => encodeURIComponent(`${stop.name}, ${state.selectedTrip.name}`)).join('%7C');
+      return `https://www.google.com/maps/dir/?api=1&origin=${destCity}&destination=${destCity}&waypoints=${waypoints}&travelmode=driving`;
+    }
+
+    // Build the Smart Chronological Itinerary
+    function renderItinerary() {
+      const start = new Date($("startDate").value + "T12:00:00");
+      const days = Number($("duration").value);
+      const selected = state.activities.filter(a => a.selected);
+      
+      const itinerary = Array.from({length: days}, (_, i) => ({
+        dayNum: i + 1, date: addDays(start, i), items: []
+      }));
+
+      selected.forEach((activity, i) => {
+        itinerary[i % days].items.push(activity); 
+      });
+
+      $("timeline").innerHTML = itinerary.map((day, idx) => {
+        const isTravelDay = (idx === 0 || idx === days - 1);
+        const mapUrl = generateDailyRouteUrl(day.items);
+        
+        let html = `<article class="day-card">
+          <div class="day-head"><b>Day ${day.dayNum} · ${shortDate(day.date)}</b></div>`;
+        
+        if (idx === 0) html += `<div class="slot"><div class="slot-time">Morning</div><div><b>Drive to ${state.selectedTrip.name}</b></div></div>`;
+        
+        day.items.forEach((item, j) => {
+          const time = j === 0 ? "Midday" : "Afternoon";
+          html += `<div class="slot"><div class="slot-time">${time}</div><div><b>${item.name}</b><br><span style="font-size:10px; color:gray">${item.note}</span></div></div>`;
+        });
+
+        if (idx === days - 1) html += `<div class="slot"><div class="slot-time">Evening</div><div><b>Drive Home</b></div></div>`;
+        
+        if (day.items.length > 0) {
+          html += `<a href="${mapUrl}" target="_blank" rel="noopener" class="map-btn">📍 Map Today's Route ↗</a>`;
+        } else {
+           html += `<div style="font-size:12px; color:var(--muted); margin-top:10px;">Flexible day.</div>`;
+        }
+        
+        html += `</article>`;
+        return html;
       }).join("");
     }
 
-    function poiCategory(tags){
-      if(tags.natural==="beach") return "beach";
-      if(tags.leisure==="fishing") return "fishing";
-      if(tags.historic) return "history";
-      if(["museum","gallery"].includes(tags.tourism)||tags.amenity==="arts_centre") return "arts";
-      if(["zoo","theme_park","aquarium"].includes(tags.tourism)) return "family";
-      if(["park","nature_reserve"].includes(tags.leisure)) return "outdoors";
-      if(["garden","spa"].includes(tags.leisure)) return "relax";
-      if(tags.amenity==="marketplace"||["mall","department_store"].includes(tags.shop)) return "shopping";
-      if(["theatre","cinema"].includes(tags.amenity)||tags.leisure==="stadium") return "shows";
-      if(["restaurant","cafe","food_court"].includes(tags.amenity)) return "food";
-      if(["attraction","viewpoint"].includes(tags.tourism)) return "sights";
-      return "sights";
-    }
-
-    function genericActivities(trip){
-      const city=trip.name;
-      const generic={
-        festivals:{name:`Check the local festival and event calendar`,type:"festivals",cost:"Varies",note:`Look for events happening during your exact dates in ${city}.`},
-        sights:{name:`Explore the best-known sights in ${city}`,type:"sights",cost:"$–$$",note:"Start with one landmark and leave time for nearby discoveries."},
-        outdoors:{name:`Spend time at a local park or scenic trail`,type:"outdoors",cost:"Free–$",note:"Choose a route that fits the forecast and your pace."},
-        fishing:{name:`Find a public fishing spot or guided outing`,type:"fishing",cost:"$–$$$",note:"Confirm permits, seasons, access rules, and equipment needs."},
-        beach:{name:`Plan a beach or waterfront afternoon`,type:"beach",cost:"Free–$",note:"Check tides, water conditions, parking, and access before leaving."},
-        history:{name:`Visit a local historic district or landmark`,type:"history",cost:"Free–$$",note:"Pair it with a walking route through the older part of town."},
-        food:{name:`Choose one local food stop you are excited about`,type:"food",cost:"$–$$",note:"Make this the anchor for one flexible neighborhood outing."},
-        arts:{name:`Visit a museum, gallery, or arts district`,type:"arts",cost:"$–$$",note:"Check timed-entry rules and closed days."},
-        shopping:{name:`Browse a market or walkable shopping district`,type:"shopping",cost:"Free–$$$",note:"Set a personal spending cap before you go."},
-        family:{name:`Pick one family-friendly attraction`,type:"family",cost:"$–$$$",note:"Reserve tickets early for popular dates."},
-        relax:{name:`Save a slow morning or quiet afternoon`,type:"relax",cost:"Free–$$",note:"Keep this block unscheduled until the trip."},
-        shows:{name:`See a live show, game, or evening performance`,type:"shows",cost:"$–$$$",note:"Compare start times with the rest of the itinerary."}
-      };
-      return [...state.interests].map(i=>({...generic[i],id:`generic-${i}`,selected:true,source:"smart"})).filter(a=>a.name);
-    }
-
-    async function getActivities(trip){
-      const radius=trip.transport.mode==="Local"?18000:24000;
-      const query=`[out:json][timeout:22];(
-        nwr(around:${radius},${trip.lat},${trip.lon})["tourism"~"attraction|museum|gallery|zoo|theme_park|aquarium|viewpoint"]["name"];
-        nwr(around:${radius},${trip.lat},${trip.lon})["leisure"~"park|nature_reserve|garden|fishing|stadium|spa"]["name"];
-        nwr(around:${radius},${trip.lat},${trip.lon})["natural"="beach"]["name"];
-        nwr(around:${radius},${trip.lat},${trip.lon})["historic"]["name"];
-        nwr(around:${radius},${trip.lat},${trip.lon})["amenity"~"marketplace|theatre|cinema|arts_centre|restaurant|cafe|food_court"]["name"];
-        nwr(around:${radius},${trip.lat},${trip.lon})["shop"~"mall|department_store"]["name"];
-      );out center tags 100;`;
-      const url=`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-      let poi=[];
-      try{
-        const data=await fetchJSON(url,`weekaway-poi-${trip.lat.toFixed(2)}-${trip.lon.toFixed(2)}`,1000*60*60*24*7);
-        const seen=new Set();
-        poi=(data.elements||[]).map((el,idx)=>{
-          const name=el.tags?.name;
-          if(!name || seen.has(name.toLowerCase())) return null;
-          seen.add(name.toLowerCase());
-          const type=poiCategory(el.tags||{});
-          return {id:`poi-${el.type}-${el.id||idx}`,name,type,cost:["outdoors","beach","sights","history"].includes(type)?"Free–$":"$–$$",note:`A real nearby ${INTERESTS[type]?.label.toLowerCase()||"place"} option. Check current hours and admission.`,selected:state.interests.has(type),source:"osm"};
-        }).filter(Boolean);
-      }catch(_){ }
-
-      const selectedOrder=[...state.interests];
-      const selectedPoi=[];
-      selectedOrder.forEach(type=>{
-        selectedPoi.push(...poi.filter(p=>p.type===type).slice(0,type==="food"?2:3));
-      });
-      const fallback=genericActivities(trip).filter(g=>!selectedPoi.some(p=>p.type===g.type));
-      const combined=[...selectedPoi,...fallback];
-      if(combined.length<6){
-        combined.push(...poi.filter(p=>!combined.some(c=>c.id===p.id)).slice(0,6-combined.length).map(p=>({...p,selected:false})));
-      }
-      return combined.slice(0,16);
-    }
-
-    function renderActivities(){
-      if(!state.activities.length){
-        $("activityList").innerHTML='<div class="empty">No named places were returned, so use the event and web-search options below to fill in the plan.</div>';
-        return;
-      }
-      $("activityList").innerHTML=state.activities.map((a,i)=>{
-        const meta=INTERESTS[a.type]||{icon:"📍",label:"Activity"};
-        return `<label class="activity-row">
-          <input type="checkbox" data-kind="activity" data-index="${i}" ${a.selected?"checked":""} />
-          <span class="activity-icon">${meta.icon}</span>
-          <span><span class="activity-name">${escapeHtml(a.name)}</span><span class="activity-type">${escapeHtml(meta.label)} · ${escapeHtml(a.note||"")}</span></span>
-          <span class="activity-cost">${escapeHtml(a.cost||"Varies")}</span>
-        </label>`;
-      }).join("");
-      document.querySelectorAll('input[data-kind="activity"]').forEach(input=>input.addEventListener("change",()=>{
-        state.activities[Number(input.dataset.index)].selected=input.checked;
-        renderItinerary(); updateSummary();
-      }));
-    }
-
-    async function getEvents(trip){
-      if(!state.interests.has("festivals") && !state.interests.has("shows") && !state.interests.has("family")) return [];
-      const key=localStorage.getItem("weekaway-ticketmaster-key")||"";
-      if(!key) return [];
-      const start=parseLocalDate($("startDate").value);
-      const end=addDays(start,Number($("duration").value)-1);
-      const params=new URLSearchParams({
-        apikey:key,
-        latlong:`${trip.lat},${trip.lon}`,
-        radius:trip.transport.mode==="Local"?"30":"50",
-        unit:"miles",
-        startDateTime:`${dateOnly(start)}T00:00:00Z`,
-        endDateTime:`${dateOnly(end)}T23:59:59Z`,
-        sort:"date,asc",
-        size:"18"
-      });
-      if(state.interests.has("festivals")) params.set("keyword","festival");
-      try{
-        let data=await fetchJSON(`https://app.ticketmaster.com/discovery/v2/events.json?${params}`);
-        let events=data?._embedded?.events||[];
-        if(!events.length && params.has("keyword")){
-          params.delete("keyword");
-          data=await fetchJSON(`https://app.ticketmaster.com/discovery/v2/events.json?${params}`);
-          events=data?._embedded?.events||[];
-        }
-        return events.filter(e=>!SAFE_EVENT_BLOCKLIST.test(e.name||"")) .slice(0,8).map((e,i)=>({
-          id:e.id||`event-${i}`,
-          name:e.name,
-          date:e.dates?.start?.localDate||dateOnly(start),
-          time:e.dates?.start?.localTime||"",
-          venue:e._embedded?.venues?.[0]?.name||"Local venue",
-          url:e.url||"",
-          type:"festivals",
-          cost:"Tickets",
-          note:`${e.dates?.start?.localTime?formatClock(e.dates.start.localTime):"Time TBA"} · ${e._embedded?.venues?.[0]?.name||"Venue TBA"}`,
-          selected:i<2
-        }));
-      }catch(err){
-        console.warn("Event lookup failed",err); return [];
-      }
-    }
-
-    function formatClock(time){
-      if(!time) return "Time TBA";
-      const [h,m]=time.split(":").map(Number); const d=new Date(2000,0,1,h,m);
-      return new Intl.DateTimeFormat("en-US",{hour:"numeric",minute:"2-digit"}).format(d);
-    }
-
-    function searchUrl(kind){
-      const trip=state.selectedTrip;
-      const start=parseLocalDate($("startDate").value);
-      const end=addDays(start,Number($("duration").value)-1);
-      const q=kind==="festivals"
-        ? `festivals and events in ${trip.name} ${trip.state} ${dateOnly(start)} to ${dateOnly(end)}`
-        : `things to do in ${trip.name} ${trip.state} ${dateOnly(start)} to ${dateOnly(end)}`;
-      return `https://www.google.com/search?q=${encodeURIComponent(q)}`;
-    }
-
-    function renderEvents(){
-      const key=localStorage.getItem("weekaway-ticketmaster-key")||"";
-      if(state.events.length){
-        $("eventCopy").textContent="Check any live event you want placed into the itinerary.";
-        $("eventArea").innerHTML=`<div class="activity-list">${state.events.map((e,i)=>`<label class="activity-row">
-          <input type="checkbox" data-kind="event" data-index="${i}" ${e.selected?"checked":""} />
-          <span class="activity-icon">🎟️</span>
-          <span><span class="activity-name">${escapeHtml(e.name)}</span><span class="activity-type">${escapeHtml(longDate(parseLocalDate(e.date)))} · ${escapeHtml(e.note)}</span></span>
-          ${e.url?`<a class="activity-cost" href="${escapeHtml(e.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Details ↗</a>`:`<span class="activity-cost">Details</span>`}
-        </label>`).join("")}</div>`;
-        document.querySelectorAll('input[data-kind="event"]').forEach(input=>input.addEventListener("change",()=>{
-          state.events[Number(input.dataset.index)].selected=input.checked;
-          renderItinerary(); updateSummary();
-        }));
-      }else{
-        $("eventCopy").textContent=key?"No Ticketmaster results appeared for these dates. Broader searches may find community festivals and free events.":"The trip still works without an event key. These searches open results for the chosen city and exact travel dates.";
-        $("eventArea").innerHTML=`<div class="empty">${key?"No live event listings were returned.":"Connect the optional Ticketmaster key in ⚙️ to add supported events directly."}<div class="event-actions"><a class="search-link" href="${searchUrl("festivals")}" target="_blank" rel="noopener">Search festivals ↗</a><a class="search-link" href="${searchUrl("things")}" target="_blank" rel="noopener">Search things to do ↗</a></div></div>`;
-      }
-    }
-
-    function activitySlotsPerDay(){
-      const pace=$("pace").value;
-      return pace==="relaxed"?2:pace==="packed"?4:3;
-    }
-
-    function renderItinerary(){
-      const trip=state.selectedTrip;
-      if(!trip) return;
-      const start=parseLocalDate($("startDate").value);
-      const days=Number($("duration").value);
-      const slots=activitySlotsPerDay();
-      const selectedActivities=state.activities.filter(a=>a.selected);
-      const selectedEvents=state.events.filter(e=>e.selected);
-      const eventByDate=new Map();
-      selectedEvents.forEach(e=>{
-        if(!eventByDate.has(e.date)) eventByDate.set(e.date,[]);
-        eventByDate.get(e.date).push(e);
-      });
-      const queue=[...selectedActivities];
-      const dayCards=[];
-
-      for(let i=0;i<days;i++){
-        const date=addDays(start,i), key=dateOnly(date);
-        const items=[];
-        const travelDay=trip.transport.mode!=="Local";
-        if(i===0 && travelDay){
-          items.push({time:"Morning",title:`Travel to ${trip.name}`,note:`Allow ${trip.transport.time}; confirm the real route and schedule.`});
-        }
-        if(i===days-1 && travelDay && days>1){
-          // Leave room for the return trip.
-        }
-        (eventByDate.get(key)||[]).forEach(e=>items.push({time:e.time?formatClock(e.time):"Event",title:e.name,note:e.venue}));
-        const target=Math.max(1,slots-(items.length)-(i===days-1&&travelDay?1:0));
-        for(let j=0;j<target && queue.length;j++){
-          const a=queue.shift();
-          const time=["Morning","Afternoon","Evening","Flexible"][Math.min(items.length,3)];
-          items.push({time,title:a.name,note:a.note});
-        }
-        if(!items.length){
-          items.push({time:"Flexible",title:"Keep this day open",note:"Use it for weather changes, rest, or a new local find."});
-        }
-        if(i===days-1 && travelDay){
-          items.push({time:"Later",title:`Return toward ${state.home.city}`,note:"Leave extra time for traffic, stops, or transit changes."});
-        }
-        const wx=state.weatherDays[i];
-        dayCards.push(`<article class="day-card"><div class="day-head"><b>Day ${i+1} · ${escapeHtml(shortDate(date))}</b><span>${wx?`${weatherEmoji(wx.code)} ${wx.high}° / ${wx.low}°`:"Flexible weather plan"}</span></div>${items.map(item=>`<div class="slot"><div class="slot-time">${escapeHtml(item.time)}</div><div class="slot-text"><b>${escapeHtml(item.title)}</b><small>${escapeHtml(item.note||"")}</small></div></div>`).join("")}</article>`);
-      }
-
-      if(queue.length){
-        dayCards.push(`<article class="day-card"><div class="day-head"><b>Extra ideas</b><span>Swap these in anytime</span></div>${queue.map(a=>`<div class="slot"><div class="slot-time">Optional</div><div class="slot-text"><b>${escapeHtml(a.name)}</b><small>${escapeHtml(a.note||"")}</small></div></div>`).join("")}</article>`);
-      }
-      $("timeline").innerHTML=dayCards.join("");
-    }
-
-    function updateSummary(){
-      const trip=state.selectedTrip;if(!trip)return;
-      const chosen=state.activities.filter(a=>a.selected).length+state.events.filter(e=>e.selected).length;
-      $("totalEstimate").textContent=`${formatMoney(trip.totalLow)}–${formatMoney(trip.totalHigh)}`;
-      $("travelEstimate").textContent=trip.transport.cost?`about ${formatMoney(trip.transport.cost)}`:"minimal";
-      $("activityCount").textContent=String(chosen);
-    }
-
-    function planText(){
-      const trip=state.selectedTrip;if(!trip)return "";
-      const start=parseLocalDate($("startDate").value);
-      const days=Number($("duration").value);
-      const selected=[...state.activities.filter(a=>a.selected),...state.events.filter(e=>e.selected)];
-      const lines=[
-        `WEEKAWAY PLAN`,
-        `${trip.name}${trip.state?`, ${trip.state}`:""}`,
-        `${shortDate(start)} through ${shortDate(addDays(start,days-1))}`,
-        `${trip.transport.mode} · roughly ${Math.round(trip.distance)} miles · ${trip.transport.time}`,
-        `Estimated spend: ${formatMoney(trip.totalLow)}–${formatMoney(trip.totalHigh)}`,
-        ``,
-        `THINGS I PICKED`,
-        ...selected.map(a=>`• ${a.name}`),
-        ``,
-        `Remember to verify weather, hours, tickets, routes, and prices.`
-      ];
-      return lines.join("\n");
-    }
-
-    async function copyPlan(){
-      const text=planText();
-      try{await navigator.clipboard.writeText(text);toast("Plan copied");}
-      catch(_){
-        const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();toast("Plan copied");
-      }
-    }
-
-    function savePlan(){
-      if(!state.selectedTrip)return;
-      const saved={
-        savedAt:new Date().toISOString(),
-        trip:state.selectedTrip,
-        startDate:$("startDate").value,
-        duration:Number($("duration").value),
-        activities:state.activities.filter(a=>a.selected),
-        events:state.events.filter(e=>e.selected),
-        text:planText()
-      };
-      localStorage.setItem("weekaway-saved-plan",JSON.stringify(saved));
-      toast("Trip saved on this phone");
-    }
-
-    function bindChoiceButtons(){
-      document.querySelectorAll('.choice[data-group="budget"]').forEach(btn=>btn.addEventListener("click",()=>{
-        document.querySelectorAll('.choice[data-group="budget"]').forEach(b=>b.classList.remove("active"));
-        btn.classList.add("active");state.budget=btn.dataset.value;
-      }));
-      document.querySelectorAll('.choice[data-group="weather"]').forEach(btn=>btn.addEventListener("click",()=>{
-        document.querySelectorAll('.choice[data-group="weather"]').forEach(b=>b.classList.remove("active"));
-        btn.classList.add("active");state.weather=btn.dataset.value;
-      }));
-      document.querySelectorAll('.choice[data-group="travel"]').forEach(btn=>btn.addEventListener("click",()=>{
-        const v=btn.dataset.value;
-        if(state.travel.has(v)){state.travel.delete(v);btn.classList.remove("active");}
-        else{state.travel.add(v);btn.classList.add("active");}
-        updateDriveVisibility();
-      }));
-      document.querySelectorAll(".interest").forEach(btn=>btn.addEventListener("click",()=>{
-        const v=btn.dataset.value;
-        if(state.interests.has(v)){state.interests.delete(v);btn.classList.remove("active");}
-        else{state.interests.add(v);btn.classList.add("active");}
-      }));
-    }
-
-    function init(){
-      const tomorrow=addDays(new Date(),1);
-      $("startDate").value=dateOnly(tomorrow);
-      $("startDate").min=dateOnly(new Date());
-      const savedZip=localStorage.getItem("weekaway-home-zip");
-      if(savedZip){$("zipInput").value=savedZip;lookupZip(false);}
-      const eventKey=localStorage.getItem("weekaway-ticketmaster-key")||"";
-      $("ticketmasterKey").value=eventKey;
-      bindChoiceButtons();updateDriveVisibility();
-
-      $("checkZipBtn").addEventListener("click",()=>lookupZip());
-      $("zipInput").addEventListener("keydown",e=>{if(e.key==="Enter")lookupZip();});
-      $("zipInput").addEventListener("input",()=>{state.home=null;$("locationNote").textContent="Tap Check to confirm the starting area.";$("locationNote").className="location-note";});
-      $("planBtn").addEventListener("click",buildTripMatches);
-      $("editBtn").addEventListener("click",()=>document.querySelector("main .card").scrollIntoView({behavior:"smooth"}));
-      $("copyBtn").addEventListener("click",copyPlan);
-      $("saveBtn").addEventListener("click",savePlan);
-
-      const dialog=$("settingsDialog");
-      $("settingsBtn").addEventListener("click",()=>dialog.showModal());
-      $("closeSettings").addEventListener("click",()=>dialog.close());
-      $("saveSettings").addEventListener("click",()=>{
-        const key=$("ticketmasterKey").value.trim();
-        if(key)localStorage.setItem("weekaway-ticketmaster-key",key);else localStorage.removeItem("weekaway-ticketmaster-key");
-        dialog.close();toast(key?"Live event key saved":"Event key removed");
-      });
-      dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
-    }
-
-    init();
+    $("checkZipBtn").addEventListener("click", lookupZip);
+    $("planBtn").addEventListener("click", buildTripMatches);
+    $("startDate").value = dateOnly(addDays(new Date(), 1));
   </script>
 </body>
 </html>
