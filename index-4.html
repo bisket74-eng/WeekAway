@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#eef8f4" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>WeekAway — Road Trip Planner</title>
+  <style>
+    :root{
+      --bg:#f3f8f6;
+      --card:#ffffff;
+      --ink:#22312d;
+      --muted:#687872;
+      --line:#dce8e4;
+      --accent:#2f8777;
+      --accent-dark:#205e53;
+      --accent-soft:#ddf3ed;
+      --blue-soft:#e9f2fb;
+      --warm-soft:#fff3dc;
+      --rose-soft:#fff1f1;
+      --shadow:0 10px 28px rgba(34,69,61,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, #e0f3ec 0, transparent 34%),
+        radial-gradient(circle at 94% 8%, #e6eff9 0, transparent 30%),
+        var(--bg);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    button,input,select{font:inherit}
+    button{touch-action:manipulation}
+    a{color:inherit}
+    .hidden{display:none!important}
+
+    .app{width:min(760px,100%);margin:0 auto;padding:14px 14px 58px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px 13px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand-mark{width:42px;height:42px;border-radius:15px;display:grid;place-items:center;background:var(--accent);color:#fff;font-size:22px}
+    .brand h1{font-size:23px;line-height:1;margin:0;letter-spacing:-.7px}
+    .reset-btn{border:1px solid var(--line);background:rgba(255,255,255,.76);color:var(--muted);border-radius:13px;padding:9px 12px;font-weight:800;font-size:12px;cursor:pointer}
+
+    .hero{background:linear-gradient(135deg,#2f7f70,#4b9387);color:#fff;border-radius:28px;padding:22px;margin-bottom:14px}
+    .hero h2{font-size:29px;line-height:1.07;margin:4px 0 9px;letter-spacing:-.8px}
+    .hero p{margin:0;font-size:14px;opacity:.92;max-width:640px}
+
+    .card{background:rgba(255,255,255,.95);border:1px solid rgba(220,233,229,.96);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-top:13px}
+    .section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:13px}
+    .section-head h3{margin:0;font-size:18px}
+    .section-note{margin:3px 0 0;color:var(--muted);font-size:12px;line-height:1.4}
+    .step{width:30px;height:30px;flex:0 0 30px;border-radius:999px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-dark);font-size:12px;font-weight:900}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    label.field{display:block;margin-top:10px}
+    .field-title{display:block;font-size:12px;font-weight:850;margin:0 0 7px}
+    input,select{width:100%;height:49px;border:1px solid var(--line);border-radius:15px;background:#fbfdfc;padding:0 13px;outline:none;color:var(--ink)}
+    input:focus,select:focus{border-color:#78b2a4;box-shadow:0 0 0 3px rgba(47,127,112,.10)}
+    .zip-row{display:grid;grid-template-columns:1fr auto;gap:9px}
+    .small-btn{min-height:49px;border:1px solid var(--line);border-radius:15px;background:#f7fbfa;color:var(--accent-dark);font-weight:850;padding:0 15px;cursor:pointer}
+
+    .choice-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:7px}
+    .choice{min-height:62px;border:1px solid var(--line);border-radius:17px;background:#fbfdfc;padding:8px 4px;cursor:pointer;text-align:center;color:var(--ink)}
+    .choice strong{display:block;font-size:13px}
+    .choice span{display:block;font-size:10px;color:var(--muted);margin-top:3px;line-height:1.2}
+    .choice.active{background:var(--accent-soft);border-color:#7fb4a8;color:var(--accent-dark)}
+    .choice.active span{color:var(--accent-dark)}
+
+    .interest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:5px}
+    .interest{border:1px solid var(--line);border-radius:17px;background:#fbfdfc;padding:12px 7px;cursor:pointer;font-weight:800;font-size:12px;text-align:center;min-height:53px}
+    .interest.active{background:var(--accent-soft);border-color:#80b7aa;color:var(--accent-dark)}
+    .more-btn{width:100%;margin-top:10px;border:1px solid var(--line);border-radius:15px;background:#f8fbfa;color:var(--accent-dark);padding:12px;font-weight:850;cursor:pointer}
+
+    .plan-btn{width:100%;min-height:57px;border:0;border-radius:18px;margin-top:15px;background:var(--accent);color:#fff;font-weight:900;font-size:16px;cursor:pointer}
+    .plan-btn:disabled{opacity:.58;cursor:not-allowed}
+
+    .loading{padding:25px 10px;text-align:center;color:var(--muted);font-size:13px}
+    .spinner{width:31px;height:31px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;margin:0 auto 12px;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .range-summary{background:var(--accent-soft);border:1px solid #c6e5dc;border-radius:19px;padding:15px;margin-bottom:12px}
+    .range-big{font-size:22px;font-weight:900;color:var(--accent-dark)}
+    .range-small{font-size:12px;color:var(--accent-dark);margin-top:5px;line-height:1.48}
+    .bands{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+    .band{border-radius:999px;padding:6px 9px;background:rgba(255,255,255,.68);font-size:10px;font-weight:850;color:var(--accent-dark)}
+    .band.current{background:var(--accent);color:#fff}
+
+    .notice{border:1px solid var(--line);background:#fbfdfc;border-radius:17px;padding:13px;font-size:12px;color:var(--muted);line-height:1.46;margin:11px 0}
+    .notice strong{color:var(--ink)}
+    .notice.info{background:var(--blue-soft);border-color:#d4e4f3}
+    .notice.error{background:var(--rose-soft);border-color:#eccccc;color:#914545}
+
+    .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+    .filter-chip{border:1px solid var(--line);border-radius:999px;background:#fff;padding:8px 11px;font-size:11px;font-weight:850;cursor:pointer}
+    .filter-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    .idea-list{display:grid;gap:11px;margin-top:13px}
+    .idea-card{border:1px solid var(--line);border-radius:20px;padding:15px;background:#fff}
+    .idea-card.selected{border-color:#69a698;box-shadow:0 0 0 3px rgba(47,127,112,.09)}
+    .idea-top{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:flex-start}
+    .idea-top input{width:21px;height:21px;margin-top:3px;accent-color:var(--accent)}
+    .idea-name{display:block;font-size:17px;font-weight:900;line-height:1.2}
+    .idea-meta{display:block;font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}
+    .idea-desc{font-size:12px;margin-top:10px;line-height:1.45}
+    .idea-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+    .tag{padding:5px 8px;border-radius:999px;background:var(--blue-soft);font-size:10px;font-weight:850}
+    .tag.event{background:var(--warm-soft)}
+    .source-link{display:inline-block;margin-top:10px;font-size:11px;font-weight:850;color:var(--accent-dark)}
+
+    .detail-title{margin:0 0 4px;font-size:22px}
+    .detail-sub{margin:0;color:var(--muted);font-size:12px;line-height:1.4}
+    .timeline{display:grid;gap:15px;margin-top:16px}
+    .day-card{border-left:4px solid #76a99c;background:#f8fbfa;border-radius:0 17px 17px 0;padding:12px 13px}
+    .day-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}
+    .day-head span{font-size:10px;color:var(--muted)}
+    .slot{display:grid;grid-template-columns:70px 1fr;gap:8px;margin-top:9px;font-size:12px}
+    .slot-time{color:var(--muted);font-weight:800;font-size:10px;padding-top:2px}
+    .slot-note{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.35}
+    .map-btn{display:inline-block;margin-top:12px;padding:8px 12px;background:#fff;border:1px solid var(--accent);color:var(--accent-dark);border-radius:10px;text-decoration:none;font-size:12px;font-weight:850}
+
+    .empty{padding:18px;border:1px dashed #cbd9d5;border-radius:17px;text-align:center;color:var(--muted);font-size:12px;line-height:1.5}
+    .source-note{margin-top:12px;font-size:10px;color:var(--muted);line-height:1.4}
+    .source-note a{font-weight:800}
+
+    @media(max-width:620px){
+      .choice-grid{grid-template-columns:repeat(3,1fr)}
+    }
+    @media(max-width:470px){
+      .grid-2{grid-template-columns:1fr}
+      .interest-grid{grid-template-columns:repeat(2,1fr)}
+      .hero h2{font-size:27px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">🚙</div>
+        <h1>WeekAway</h1>
+      </div>
+      <button id="resetBtn" class="reset-btn" type="button">Reset</button>
+    </header>
+
+    <section class="hero">
+      <h2>Find the road trip hiding inside your days off.</h2>
+      <p>Choose your dates, your driving comfort, and what sounds fun. WeekAway protects time for meals, sleep, check-in, and the drive home.</p>
+    </section>
+
+    <main>
+      <section class="card">
+        <div class="section-head">
+          <div>
+            <h3>1. Where and when?</h3>
+            <p class="section-note">The number of days helps WeekAway decide what is realistically reachable.</p>
+          </div>
+          <span class="step">1</span>
+        </div>
+
+        <div class="zip-row">
+          <input id="zipInput" inputmode="numeric" maxlength="5" placeholder="Home ZIP code" autocomplete="postal-code" />
+          <button class="small-btn" id="checkZipBtn" type="button">Check</button>
+        </div>
+        <div id="zipStatus" class="section-note" aria-live="polite"></div>
+
+        <div class="grid-2">
+          <label class="field">
+            <span class="field-title">First day off</span>
+            <input id="startDate" type="date" />
+          </label>
+          <label class="field">
+            <span class="field-title">How many days?</span>
+            <select id="duration">
+              <option value="1">1 day</option>
+              <option value="2">2 days</option>
+              <option value="3">3 days</option>
+              <option value="4" selected>4 days</option>
+              <option value="5">5 days</option>
+              <option value="6">6 days</option>
+              <option value="7">7 days</option>
+              <option value="10">10 days</option>
+              <option value="14">14 days</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div>
+            <h3>2. How much driving feels okay?</h3>
+            <p class="section-note">This is the most driving you want on a travel day.</p>
+          </div>
+          <span class="step">2</span>
+        </div>
+
+        <div id="driveChoices" class="choice-grid" role="group" aria-label="Maximum driving time">
+          <button class="choice active" type="button" data-hours="auto"><strong>Auto</strong><span>Based on trip length</span></button>
+          <button class="choice" type="button" data-hours="2"><strong>Under 2</strong><span>hours away</span></button>
+          <button class="choice" type="button" data-hours="4"><strong>Up to 4</strong><span>hours away</span></button>
+          <button class="choice" type="button" data-hours="8"><strong>Up to 8</strong><span>hours away</span></button>
+          <button class="choice" type="button" data-hours="12"><strong>Up to 12</strong><span>hours away</span></button>
+        </div>
+
+        <div class="grid-2">
+          <label class="field">
+            <span class="field-title">Daily spending per person</span>
+            <select id="budget">
+              <option value="0-50">$0–$50</option>
+              <option value="50-100" selected>$50–$100</option>
+              <option value="100-175">$100–$175</option>
+              <option value="175+">$175+</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-title">Trip pace</span>
+            <select id="pace">
+              <option value="relaxed">Relaxed</option>
+              <option value="balanced" selected>Balanced</option>
+              <option value="packed">See a lot</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span class="field-title">Where would you rather sleep?</span>
+          <select id="stayStyle">
+            <option value="either" selected>Hotel, cabin, or camping — any is fine</option>
+            <option value="hotel">Hotel or motel</option>
+            <option value="camping">Camping or cabin</option>
+            <option value="daytrip">Return home each night</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div>
+            <h3>3. What sounds fun?</h3>
+            <p class="section-note">These become the actual event and stop search.</p>
+          </div>
+          <span class="step">3</span>
+        </div>
+
+        <div id="interestGrid" class="interest-grid">
+          <button class="interest active" type="button" data-interest="festivals" data-label="Festivals & Fairs">🎪 Festivals</button>
+          <button class="interest active" type="button" data-interest="food" data-label="Food">🍴 Food</button>
+          <button class="interest active" type="button" data-interest="outdoors" data-label="Outdoors">🥾 Outdoors</button>
+          <button class="interest" type="button" data-interest="amusement" data-label="Amusement Parks">🎢 Amusement</button>
+          <button class="interest" type="button" data-interest="sights" data-label="Sights & Landmarks">📸 Sights</button>
+          <button class="interest" type="button" data-interest="history" data-label="History & Museums">🏛️ History</button>
+          <button class="interest" type="button" data-interest="art" data-label="Art & Culture">🎨 Art</button>
+          <button class="interest" type="button" data-interest="music" data-label="Music & Shows">🎵 Music</button>
+          <button class="interest" type="button" data-interest="family" data-label="Family Fun">👨‍👩‍👧 Family</button>
+          <button class="interest" type="button" data-interest="markets" data-label="Markets & Shopping">🛍️ Markets</button>
+          <button class="interest" type="button" data-interest="odd" data-label="Roadside Oddities">🛸 Odd Stops</button>
+          <button class="interest" type="button" data-interest="water" data-label="Waterfronts & Lakes">🏖️ Water</button>
+        </div>
+
+        <div id="extraInterests" class="interest-grid hidden" style="margin-top:8px">
+          <button class="interest" type="button" data-interest="wildlife" data-label="Wildlife & Aquariums">🦦 Wildlife</button>
+          <button class="interest" type="button" data-interest="sports" data-label="Sports & Games">⚾ Sports</button>
+          <button class="interest" type="button" data-interest="scenic" data-label="Scenic Drives">🛣️ Scenic Drives</button>
+          <button class="interest" type="button" data-interest="relaxation" data-label="Relaxation">♨️ Relaxation</button>
+          <button class="interest" type="button" data-interest="arcades" data-label="Arcades & Games">🕹️ Arcades</button>
+          <button class="interest" type="button" data-interest="shopping" data-label="Antiques & Shopping">🧺 Antiques</button>
+        </div>
+
+        <button id="moreInterestsBtn" class="more-btn" type="button">More interests</button>
+        <button class="plan-btn" id="planBtn" type="button">Find Road-Trip Ideas</button>
+      </section>
+
+      <section id="loadingCard" class="card hidden" aria-live="polite">
+        <div class="loading">
+          <div class="spinner"></div>
+          <b id="loadingTitle">Calculating a sensible driving range…</b>
+          <div id="loadingText" style="margin-top:6px">Then WeekAway will find things worth driving toward.</div>
+        </div>
+      </section>
+
+      <section id="resultsCard" class="card hidden">
+        <div class="section-head">
+          <div>
+            <h3>Pick what should shape the trip</h3>
+            <p class="section-note">Select one or more ideas. WeekAway builds the route in that direction.</p>
+          </div>
+        </div>
+
+        <div id="rangeSummary" class="range-summary"></div>
+        <div id="searchNotice"></div>
+        <div id="filterRow" class="filter-row hidden"></div>
+        <div id="ideaList" class="idea-list"></div>
+        <div id="sourceNote" class="source-note"></div>
+      </section>
+
+      <section id="detailCard" class="card hidden">
+        <h2 id="detailName" class="detail-title">Your WeekAway</h2>
+        <p id="detailSub" class="detail-sub"></p>
+        <div id="timeline" class="timeline"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    "use strict";
+
+    /* =========================================================
+       WEEKAWAY — SUPABASE CONNECTION FOR TOMORROW
+       ---------------------------------------------------------
+       The app already works in a free OpenStreetMap preview mode.
+       When the Edge Function is ready, paste only your public project
+       URL and publishable/anon key below. Do not put private service
+       keys in this file.
+
+       Expected Edge Function name: find-road-trip-ideas
+       Expected response may contain: { ideas: [] }
+       or { events: [], places: [], notice: "" }
+    ========================================================== */
+    const CONFIG = {
+      supabaseUrl: "",
+      supabasePublishableKey: "",
+      functionName: "find-road-trip-ideas"
+    };
+
+    const $ = id => document.getElementById(id);
+    const state = {
+      home: null,
+      maxDriveChoice: "auto",
+      ideas: [],
+      selectedIdeaIds: new Set(),
+      activeFilter: "all",
+      previewMode: false
+    };
+
+    const OVERPASS_SERVERS = [
+      "https://overpass-api.de/api/interpreter",
+      "https://overpass.kumi.systems/api/interpreter"
+    ];
+
+    const INTEREST_SELECTORS = {
+      food: [
+        '["amenity"~"restaurant|cafe|food_court"]["name"]',
+        '["amenity"="marketplace"]["name"]'
+      ],
+      outdoors: [
+        '["tourism"~"camp_site|caravan_site|picnic_site"]["name"]',
+        '["leisure"~"park|nature_reserve"]["name"]',
+        '["highway"="trailhead"]["name"]',
+        '["natural"~"waterfall|peak"]["name"]',
+        '["natural"="water"]["name"]'
+      ],
+      amusement: [
+        '["tourism"="theme_park"]["name"]',
+        '["leisure"="water_park"]["name"]'
+      ],
+      sights: [
+        '["tourism"~"attraction|viewpoint"]["name"]',
+        '["man_made"="observation_tower"]["name"]',
+        '["historic"]["name"]'
+      ],
+      history: [
+        '["tourism"="museum"]["name"]',
+        '["historic"]["name"]'
+      ],
+      art: [
+        '["tourism"="gallery"]["name"]',
+        '["amenity"="arts_centre"]["name"]',
+        '["amenity"="theatre"]["name"]'
+      ],
+      music: [
+        '["amenity"="theatre"]["name"]',
+        '["amenity"="music_venue"]["name"]'
+      ],
+      family: [
+        '["tourism"~"zoo|aquarium|theme_park"]["name"]',
+        '["leisure"~"water_park|playground"]["name"]'
+      ],
+      markets: [
+        '["amenity"="marketplace"]["name"]',
+        '["shop"~"antiques|mall"]["name"]'
+      ],
+      odd: [
+        '["tourism"="attraction"]["name"]',
+        '["historic"~"monument|memorial"]["name"]',
+        '["man_made"="observation_tower"]["name"]'
+      ],
+      water: [
+        '["natural"~"water|beach|bay"]["name"]',
+        '["leisure"~"marina|beach_resort"]["name"]',
+        '["tourism"="aquarium"]["name"]'
+      ],
+      wildlife: [
+        '["tourism"~"zoo|aquarium"]["name"]',
+        '["leisure"="nature_reserve"]["name"]'
+      ],
+      sports: [
+        '["leisure"~"stadium|sports_centre|golf_course|bowling_alley"]["name"]'
+      ],
+      scenic: [
+        '["tourism"="viewpoint"]["name"]',
+        '["natural"~"peak|waterfall"]["name"]',
+        '["mountain_pass"="yes"]["name"]'
+      ],
+      relaxation: [
+        '["leisure"="spa"]["name"]',
+        '["tourism"="resort"]["name"]',
+        '["amenity"="spa"]["name"]'
+      ],
+      arcades: [
+        '["leisure"="amusement_arcade"]["name"]',
+        '["leisure"="bowling_alley"]["name"]'
+      ],
+      shopping: [
+        '["shop"~"antiques|charity|craft|mall"]["name"]',
+        '["amenity"="marketplace"]["name"]'
+      ]
+    };
+
+    const INTEREST_LABELS = Object.fromEntries(
+      [...document.querySelectorAll(".interest")].map(button => [button.dataset.interest, button.dataset.label])
+    );
+
+    const $all = selector => [...document.querySelectorAll(selector)];
+    const dateOnly = date => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+    const addDays = (date,days) => { const copy = new Date(date); copy.setDate(copy.getDate()+days); return copy; };
+    const shortDate = date => new Intl.DateTimeFormat("en-US",{weekday:"short",month:"short",day:"numeric"}).format(date);
+    const sleep = ms => new Promise(resolve => setTimeout(resolve,ms));
+    const clamp = (value,min,max) => Math.max(min,Math.min(max,value));
+    const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[character]));
+
+    async function fetchJSON(url,options={}){
+      const response = await fetch(url,options);
+      if(!response.ok){
+        const message = await response.text().catch(()=>"");
+        throw new Error(message || `Request failed (${response.status})`);
+      }
+      return response.json();
+    }
+
+    function getCache(key,maxAgeMs){
+      try{
+        const raw = localStorage.getItem(key);
+        if(!raw) return null;
+        const parsed = JSON.parse(raw);
+        if(!parsed || Date.now()-parsed.savedAt > maxAgeMs){
+          localStorage.removeItem(key);
+          return null;
+        }
+        return parsed.value;
+      }catch{
+        return null;
+      }
+    }
+
+    function setCache(key,value){
+      try{
+        localStorage.setItem(key,JSON.stringify({savedAt:Date.now(),value}));
+      }catch{
+        // The app still works when storage is unavailable.
+      }
+    }
+
+    async function lookupZip(){
+      const zip = $("zipInput").value.trim();
+      if(!/^\d{5}$/.test(zip)){
+        $("zipStatus").textContent = "Enter a five-digit ZIP code.";
+        state.home = null;
+        return false;
+      }
+
+      $("checkZipBtn").textContent = "Checking…";
+      try{
+        const data = await fetchJSON(`https://api.zippopotam.us/us/${zip}`);
+        const place = data.places?.[0];
+        if(!place) throw new Error("ZIP not found");
+
+        state.home = {
+          zip,
+          lat:Number(place.latitude),
+          lon:Number(place.longitude),
+          city:place["place name"],
+          state:place["state abbreviation"]
+        };
+        localStorage.setItem("weekaway-home-zip",zip);
+        $("checkZipBtn").textContent = "Verified";
+        $("zipStatus").textContent = `${state.home.city}, ${state.home.state}`;
+        return true;
+      }catch{
+        state.home = null;
+        $("checkZipBtn").textContent = "Check";
+        $("zipStatus").textContent = "That ZIP could not be verified.";
+        return false;
+      }
+    }
+
+    function automaticDriveHours(days){
+      if(days <= 1) return 1.5;
+      if(days === 2) return 3;
+      if(days <= 4) return 4;
+      if(days <= 6) return 8;
+      return 12;
+    }
+
+    function calculateDrivePlan(){
+      const days = Number($("duration").value);
+      const chosenHours = state.maxDriveChoice === "auto"
+        ? automaticDriveHours(days)
+        : Number(state.maxDriveChoice);
+      const isDayTrip = $("stayStyle").value === "daytrip";
+      const oneWayHours = isDayTrip ? Math.min(chosenHours/2,2.5) : chosenHours;
+      const approximateMiles = Math.round(oneWayHours*52);
+
+      let explanation = "";
+      if(isDayTrip){
+        explanation = "Because you chose to return home each night, WeekAway divides the driving time between the trip out and the trip back.";
+      }else if(state.maxDriveChoice === "auto"){
+        explanation = `Auto mode recommends about ${oneWayHours} ${oneWayHours === 1 ? "hour" : "hours"} away for a ${days}-day trip, leaving the first and final days usable instead of exhausting.`;
+      }else{
+        explanation = `You chose up to ${oneWayHours} ${oneWayHours === 1 ? "hour" : "hours"} away. WeekAway treats the first and final days as travel days and keeps sleep and meal time open.`;
+      }
+
+      return {
+        days,
+        oneWayHours,
+        oneWayMinutes:Math.round(oneWayHours*60),
+        approximateMiles,
+        approximateRadiusMeters:Math.round(Math.min(850000,approximateMiles*1609.344)),
+        explanation,
+        isDayTrip
+      };
+    }
+
+    function formatDateRange(){
+      const start = new Date($("startDate").value + "T12:00:00");
+      const days = Number($("duration").value);
+      const end = addDays(start,days-1);
+      return {start,end,startISO:dateOnly(start),endISO:dateOnly(end)};
+    }
+
+    function selectedInterests(){
+      return $all(".interest.active").map(button => button.dataset.interest);
+    }
+
+    function selectedInterestLabels(){
+      return selectedInterests().map(id => INTEREST_LABELS[id] || id);
+    }
+
+    function showLoading(show){
+      $("loadingCard").classList.toggle("hidden",!show);
+      $("planBtn").disabled = show;
+      $("planBtn").textContent = show ? "Searching…" : "Find Road-Trip Ideas";
+    }
+
+    function renderRangeSummary(plan){
+      const currentBand = plan.oneWayHours < 2 ? "Under 2" : plan.oneWayHours <= 4 ? "Up to 4" : plan.oneWayHours <= 8 ? "Up to 8" : "Up to 12";
+      const bands = ["Under 2","Up to 4","Up to 8","Up to 12"];
+      $("rangeSummary").innerHTML = `
+        <div class="range-big">Search plan: ${escapeHtml(currentBand)} hours away</div>
+        <div class="range-small">About ${plan.approximateMiles} road miles is used only as an early discovery area. The connected Supabase version will check routed drive time before keeping a result.<br>${escapeHtml(plan.explanation)}</div>
+        <div class="bands">${bands.map(band => `<span class="band ${band===currentBand ? "current" : ""}">${escapeHtml(band)}</span>`).join("")}</div>
+      `;
+    }
+
+    function hasSupabaseConnection(){
+      return Boolean(CONFIG.supabaseUrl.trim() && CONFIG.supabasePublishableKey.trim());
+    }
+
+    async function callSupabaseFunction(payload){
+      const base = CONFIG.supabaseUrl.replace(/\/$/,"");
+      return fetchJSON(`${base}/functions/v1/${CONFIG.functionName}`,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "apikey":CONFIG.supabasePublishableKey,
+          "Authorization":`Bearer ${CONFIG.supabasePublishableKey}`
+        },
+        body:JSON.stringify(payload)
+      });
+    }
+
+    async function overpassQuery(query){
+      let lastError = null;
+      for(const server of OVERPASS_SERVERS){
+        try{
+          return await fetchJSON(`${server}?data=${encodeURIComponent(query)}`);
+        }catch(error){
+          lastError = error;
+        }
+      }
+      throw lastError || new Error("OpenStreetMap search unavailable");
+    }
+
+    function distanceMiles(lat1,lon1,lat2,lon2){
+      const radius = 3958.8;
+      const dLat = (lat2-lat1)*Math.PI/180;
+      const dLon = (lon2-lon1)*Math.PI/180;
+      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+      return radius*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    }
+
+    function approximateDriveHours(airMiles){
+      return Math.max(.25,(airMiles*1.18/55)*1.08);
+    }
+
+    function bearingDegrees(lat1,lon1,lat2,lon2){
+      const phi1=lat1*Math.PI/180;
+      const phi2=lat2*Math.PI/180;
+      const lambda=(lon2-lon1)*Math.PI/180;
+      const y=Math.sin(lambda)*Math.cos(phi2);
+      const x=Math.cos(phi1)*Math.sin(phi2)-Math.sin(phi1)*Math.cos(phi2)*Math.cos(lambda);
+      return (Math.atan2(y,x)*180/Math.PI+360)%360;
+    }
+
+    function directionName(degrees){
+      const names=["North","Northeast","East","Southeast","South","Southwest","West","Northwest"];
+      return names[Math.round(degrees/45)%8];
+    }
+
+    function parsePopulation(value){
+      const number = Number(String(value || "").replace(/[^0-9]/g,""));
+      return Number.isFinite(number) ? number : 0;
+    }
+
+    async function findCandidateCities(plan){
+      const cacheKey = `weekaway-cities-${state.home.zip}-${Math.round(plan.approximateRadiusMeters/50000)}`;
+      const cached = getCache(cacheKey,7*24*60*60*1000);
+      if(cached) return cached;
+
+      const query = `[out:json][timeout:25];node(around:${plan.approximateRadiusMeters},${state.home.lat},${state.home.lon})["place"~"city|town"]["name"];out tags 160;`;
+      const data = await overpassQuery(query);
+
+      const candidates = (data.elements || []).map(element => {
+        const airMiles = distanceMiles(state.home.lat,state.home.lon,element.lat,element.lon);
+        const driveHours = approximateDriveHours(airMiles);
+        return {
+          id:`city-${element.id}`,
+          name:element.tags?.name || "",
+          state:element.tags?.["addr:state"] || element.tags?.["is_in:state_code"] || "",
+          lat:Number(element.lat),
+          lon:Number(element.lon),
+          airMiles,
+          driveHours,
+          direction:directionName(bearingDegrees(state.home.lat,state.home.lon,element.lat,element.lon)),
+          population:parsePopulation(element.tags?.population),
+          placeType:element.tags?.place || "town"
+        };
+      }).filter(city => city.name && city.airMiles > 18 && city.driveHours <= plan.oneWayHours*1.12);
+
+      candidates.sort((a,b) => {
+        const populationScore = Math.log10((b.population||5000)+10)-Math.log10((a.population||5000)+10);
+        const distanceScore = Math.abs(a.driveHours-plan.oneWayHours*.72)-Math.abs(b.driveHours-plan.oneWayHours*.72);
+        return populationScore*1.4 + distanceScore;
+      });
+
+      const chosen=[];
+      const usedDirections=new Set();
+      for(const city of candidates){
+        if(chosen.length>=6) break;
+        if(!usedDirections.has(city.direction)){
+          chosen.push(city);
+          usedDirections.add(city.direction);
+        }
+      }
+      for(const city of candidates){
+        if(chosen.length>=6) break;
+        if(!chosen.some(item => item.id===city.id)) chosen.push(city);
+      }
+
+      setCache(cacheKey,chosen);
+      return chosen;
+    }
+
+    function selectorsForInterests(interests){
+      const selectors=[];
+      interests.forEach(interest => {
+        (INTEREST_SELECTORS[interest] || []).forEach(selector => selectors.push(selector));
+      });
+      return [...new Set(selectors)].slice(0,14);
+    }
+
+    function detectInterest(tags,selected){
+      const pairs = [
+        ["amusement", tags.tourism==="theme_park" || tags.leisure==="water_park"],
+        ["wildlife", ["zoo","aquarium"].includes(tags.tourism)],
+        ["history", tags.tourism==="museum" || Boolean(tags.historic)],
+        ["art", tags.tourism==="gallery" || ["arts_centre","theatre"].includes(tags.amenity)],
+        ["music", ["music_venue","theatre"].includes(tags.amenity)],
+        ["arcades", ["amusement_arcade","bowling_alley"].includes(tags.leisure)],
+        ["sports", ["stadium","sports_centre","golf_course","bowling_alley"].includes(tags.leisure)],
+        ["markets", tags.amenity==="marketplace" || ["antiques","mall"].includes(tags.shop)],
+        ["shopping", Boolean(tags.shop) || tags.amenity==="marketplace"],
+        ["food", ["restaurant","cafe","food_court","marketplace"].includes(tags.amenity)],
+        ["water", ["water","beach","bay"].includes(tags.natural) || ["marina","beach_resort"].includes(tags.leisure)],
+        ["outdoors", ["camp_site","caravan_site","picnic_site"].includes(tags.tourism) || ["park","nature_reserve"].includes(tags.leisure) || tags.highway==="trailhead" || ["water","waterfall","peak"].includes(tags.natural)],
+        ["scenic", tags.tourism==="viewpoint" || ["peak","waterfall"].includes(tags.natural)],
+        ["relaxation", tags.leisure==="spa" || tags.amenity==="spa" || tags.tourism==="resort"],
+        ["sights", ["attraction","viewpoint"].includes(tags.tourism) || Boolean(tags.historic) || tags.man_made==="observation_tower"],
+        ["odd", tags.tourism==="attraction" || ["monument","memorial"].includes(tags.historic)]
+      ];
+      const match = pairs.find(([id,test]) => test && selected.includes(id));
+      return match?.[0] || pairs.find(([,test]) => test)?.[0] || "sights";
+    }
+
+    function coordinatesFromElement(element){
+      return {
+        lat:Number(element.lat ?? element.center?.lat ?? 0),
+        lon:Number(element.lon ?? element.center?.lon ?? 0)
+      };
+    }
+
+    async function findPlacesNearCity(city,interests){
+      const usableInterests = interests.filter(interest => interest!=="festivals");
+      const selectors = selectorsForInterests(usableInterests.length ? usableInterests : ["sights","outdoors"]);
+      if(selectors.length===0) return [];
+
+      const cacheKey = `weekaway-poi-${city.id}-${usableInterests.sort().join("-")}`;
+      const cached = getCache(cacheKey,7*24*60*60*1000);
+      if(cached) return cached;
+
+      const radius = city.placeType==="city" ? 22000 : 16000;
+      const clauses = selectors.map(selector => `nwr(around:${radius},${city.lat},${city.lon})${selector};`).join("");
+      const query = `[out:json][timeout:24];(${clauses});out center tags 90;`;
+      const data = await overpassQuery(query);
+
+      const unique = new Map();
+      for(const element of data.elements || []){
+        const tags=element.tags || {};
+        const name=tags.name?.trim();
+        if(!name) continue;
+        const coords=coordinatesFromElement(element);
+        if(!coords.lat || !coords.lon) continue;
+        const key=name.toLowerCase();
+        if(unique.has(key)) continue;
+        const interest=detectInterest(tags,usableInterests);
+        unique.set(key,{
+          id:`osm-${element.type}-${element.id}`,
+          type:"place",
+          name,
+          city:city.name,
+          state:city.state,
+          latitude:coords.lat,
+          longitude:coords.lon,
+          driveMinutes:Math.round(city.driveHours*60),
+          driveMiles:Math.round(city.airMiles*1.18),
+          direction:city.direction,
+          category:INTEREST_LABELS[interest] || "Road-trip stop",
+          interest,
+          cost:"Cost varies",
+          description:buildPlaceDescription(tags,city),
+          sourceName:"OpenStreetMap",
+          sourceUrl:`https://www.openstreetmap.org/${element.type}/${element.id}`,
+          startDate:"",
+          endDate:"",
+          address:[tags["addr:housenumber"],tags["addr:street"],tags["addr:city"]].filter(Boolean).join(" ")
+        });
+      }
+
+      const places=[...unique.values()];
+      const priority = usableInterests;
+      places.sort((a,b) => priority.indexOf(a.interest)-priority.indexOf(b.interest));
+
+      const balanced=[];
+      const counts={};
+      for(const place of places){
+        counts[place.interest]=(counts[place.interest]||0)+1;
+        if(counts[place.interest] <= 2) balanced.push(place);
+        if(balanced.length>=5) break;
+      }
+
+      setCache(cacheKey,balanced);
+      return balanced;
+    }
+
+    function buildPlaceDescription(tags,city){
+      if(tags.description) return tags.description.slice(0,220);
+      if(tags.tourism==="theme_park") return `An amusement-park stop near ${city.name}.`;
+      if(tags.tourism==="museum") return `A museum or historical stop near ${city.name}.`;
+      if(tags.tourism==="zoo" || tags.tourism==="aquarium") return `A wildlife-focused attraction near ${city.name}.`;
+      if(tags.tourism==="camp_site" || tags.tourism==="caravan_site") return `A possible camping base near ${city.name}.`;
+      if(tags.amenity==="restaurant" || tags.amenity==="cafe") return `A named local food stop near ${city.name}.`;
+      if(tags.natural==="water" || tags.natural==="waterfall") return `A named outdoor water stop near ${city.name}.`;
+      if(tags.tourism==="viewpoint") return `A scenic viewpoint near ${city.name}.`;
+      if(tags.historic) return `A historical landmark near ${city.name}.`;
+      return `A permanent road-trip stop near ${city.name}.`;
+    }
+
+    async function freePreviewSearch(payload,plan){
+      state.previewMode=true;
+      $("loadingTitle").textContent = "Finding reachable directions…";
+      $("loadingText").textContent = "Free preview mode is checking OpenStreetMap places. Dated festivals will be added through Supabase later.";
+
+      const permanentInterests = payload.interestIds.filter(id => id !== "festivals");
+      if(permanentInterests.length === 0){
+        return {
+          ideas:[],
+          notice:"Festivals and fairs need the Supabase dated-event search. Select at least one permanent-place interest for the free preview, or connect Supabase later for date-specific events."
+        };
+      }
+
+      const cities = await findCandidateCities(plan);
+      if(cities.length===0) return {ideas:[],notice:"No reachable destination cities were returned by the free map search. Try a larger drive-time choice."};
+
+      const selected=permanentInterests;
+      const cityResults=[];
+      for(let index=0;index<Math.min(cities.length,5);index+=1){
+        $("loadingTitle").textContent = `Checking ${cities[index].name}…`;
+        const places = await findPlacesNearCity(cities[index],selected).catch(()=>[]);
+        cityResults.push(...places);
+        await sleep(180);
+      }
+
+      const ideas = cityResults
+        .sort((a,b) => a.driveMinutes-b.driveMinutes)
+        .slice(0,18);
+
+      return {
+        ideas,
+        notice:"Free preview mode is showing permanent attractions and stops from OpenStreetMap. Once the Supabase function is connected, dated festivals, fairs, markets, performances, and community events can appear in the same list before you choose a direction."
+      };
+    }
+
+    function normalizeIdea(raw,index,typeHint="place"){
+      const type = raw.type || typeHint;
+      return {
+        id:String(raw.id || `${type}-${index}`),
+        type:type === "event" ? "event" : "place",
+        name:raw.name || "Unnamed idea",
+        city:raw.city || raw.locationCity || "",
+        state:raw.state || raw.region || "",
+        address:raw.address || "",
+        startDate:raw.startDate || raw.date || "",
+        endDate:raw.endDate || raw.startDate || raw.date || "",
+        driveMinutes:Number(raw.driveMinutes || raw.travelMinutes || 0),
+        driveMiles:Number(raw.driveMiles || raw.distanceMiles || 0),
+        description:raw.description || "",
+        cost:raw.cost || "Cost varies",
+        category:raw.category || raw.interest || (type==="event" ? "Dated event" : "Road-trip stop"),
+        interest:raw.interest || "",
+        direction:raw.direction || "",
+        sourceUrl:raw.sourceUrl || raw.url || "",
+        sourceName:raw.sourceName || raw.source || "Source",
+        latitude:Number(raw.latitude || raw.lat || 0),
+        longitude:Number(raw.longitude || raw.lon || 0)
+      };
+    }
+
+    function ideasFromFunctionResult(result){
+      if(Array.isArray(result.ideas)) return result.ideas.map((idea,index)=>normalizeIdea(idea,index,idea.type));
+      const events=(Array.isArray(result.events)?result.events:[]).map((event,index)=>normalizeIdea(event,index,"event"));
+      const places=(Array.isArray(result.places)?result.places:[]).map((place,index)=>normalizeIdea(place,index,"place"));
+      return [...events,...places];
+    }
+
+    async function buildTripMatches(){
+      if(!$("startDate").value){
+        alert("Choose the first day of the trip.");
+        return;
+      }
+
+      if(!state.home){
+        const valid=await lookupZip();
+        if(!valid) return;
+      }
+
+      const interestIds=selectedInterests();
+      if(interestIds.length===0){
+        alert("Tap at least one thing that sounds fun.");
+        return;
+      }
+
+      const plan=calculateDrivePlan();
+      const dates=formatDateRange();
+      const payload={
+        origin:{
+          zip:state.home.zip,
+          city:state.home.city,
+          state:state.home.state,
+          latitude:state.home.lat,
+          longitude:state.home.lon
+        },
+        dates:{start:dates.startISO,end:dates.endISO},
+        tripDays:plan.days,
+        maxOneWayDriveMinutes:plan.oneWayMinutes,
+        budget:$("budget").value,
+        pace:$("pace").value,
+        stayStyle:$("stayStyle").value,
+        interestIds,
+        interests:selectedInterestLabels()
+      };
+
+      $("resultsCard").classList.add("hidden");
+      $("detailCard").classList.add("hidden");
+      $("loadingTitle").textContent=`Searching up to ${plan.oneWayHours} hours from ${state.home.city}…`;
+      $("loadingText").textContent=`Trip dates: ${shortDate(dates.start)} through ${shortDate(dates.end)}.`;
+      showLoading(true);
+
+      try{
+        let result;
+        if(hasSupabaseConnection()){
+          state.previewMode=false;
+          result=await callSupabaseFunction(payload);
+          state.ideas=ideasFromFunctionResult(result);
+        }else{
+          result=await freePreviewSearch(payload,plan);
+          state.ideas=(result.ideas || []).map((idea,index)=>normalizeIdea(idea,index,idea.type));
+        }
+
+        state.ideas=state.ideas
+          .filter(idea => !idea.driveMinutes || idea.driveMinutes <= plan.oneWayMinutes*1.12)
+          .sort((a,b) => {
+            if(a.type!==b.type) return a.type==="event" ? -1 : 1;
+            return (a.driveMinutes||99999)-(b.driveMinutes||99999);
+          });
+        state.selectedIdeaIds.clear();
+        state.activeFilter="all";
+        renderResults(plan,result.notice || "");
+      }catch(error){
+        state.ideas=[];
+        renderResults(plan,`The free search could not finish right now: ${error.message}. Public map servers occasionally get busy; try again in a minute.`,true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    function renderResults(plan,notice="",isError=false){
+      renderRangeSummary(plan);
+      $("resultsCard").classList.remove("hidden");
+      $("searchNotice").innerHTML = notice
+        ? `<div class="notice ${isError ? "error" : "info"}"><strong>${isError ? "Search problem" : state.previewMode ? "Free preview" : "Live search"}</strong><br>${escapeHtml(notice)}</div>`
+        : "";
+
+      renderFilters();
+      renderIdeaCards();
+
+      $("sourceNote").innerHTML = state.previewMode
+        ? 'Permanent-place preview uses <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>. It is useful for discovery, but it does not provide ratings, complete prices, or dated festival schedules.'
+        : "";
+      $("resultsCard").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    function renderFilters(){
+      const hasEvents=state.ideas.some(idea=>idea.type==="event");
+      const hasPlaces=state.ideas.some(idea=>idea.type==="place");
+      if(!hasEvents && !hasPlaces){
+        $("filterRow").classList.add("hidden");
+        return;
+      }
+      const filters=[{id:"all",label:"All"}];
+      if(hasEvents) filters.push({id:"event",label:"Dated events"});
+      if(hasPlaces) filters.push({id:"place",label:"Places & stops"});
+      $("filterRow").classList.remove("hidden");
+      $("filterRow").innerHTML=filters.map(filter=>`<button class="filter-chip ${state.activeFilter===filter.id?"active":""}" type="button" data-filter="${filter.id}">${filter.label}</button>`).join("");
+      $all(".filter-chip").forEach(button=>button.addEventListener("click",()=>{
+        state.activeFilter=button.dataset.filter;
+        renderFilters();
+        renderIdeaCards();
+      }));
+    }
+
+    function formatDrive(idea){
+      if(!idea.driveMinutes) return "Drive time pending";
+      const hours=Math.floor(idea.driveMinutes/60);
+      const minutes=idea.driveMinutes%60;
+      return `${hours ? `${hours} hr ` : ""}${minutes ? `${minutes} min` : ""}`.trim();
+    }
+
+    function ideaLocation(idea){
+      return [idea.city,idea.state].filter(Boolean).join(", ") || "Location pending";
+    }
+
+    function renderIdeaCards(){
+      const visible=state.ideas.filter(idea=>state.activeFilter==="all" || idea.type===state.activeFilter);
+      if(visible.length===0){
+        $("ideaList").innerHTML=`<div class="empty">No matching ideas were found in this search. Try another interest or a different driving range.</div>`;
+        return;
+      }
+
+      $("ideaList").innerHTML=visible.map(idea=>{
+        const checked=state.selectedIdeaIds.has(idea.id);
+        const dateLine=idea.type==="event" && idea.startDate
+          ? `${escapeHtml(idea.startDate)}${idea.endDate && idea.endDate!==idea.startDate ? ` – ${escapeHtml(idea.endDate)}` : ""}<br>`
+          : "";
+        const source=idea.sourceUrl ? `<a class="source-link" href="${escapeHtml(idea.sourceUrl)}" target="_blank" rel="noopener">View original source ↗</a>` : "";
+        return `
+          <article class="idea-card ${checked?"selected":""}" data-idea-id="${escapeHtml(idea.id)}">
+            <label class="idea-top">
+              <input class="idea-check" type="checkbox" data-idea-id="${escapeHtml(idea.id)}" ${checked?"checked":""} />
+              <span>
+                <span class="idea-name">${escapeHtml(idea.name)}</span>
+                <span class="idea-meta">${escapeHtml(ideaLocation(idea))}<br>${dateLine}🚗 ${escapeHtml(formatDrive(idea))}${idea.driveMiles ? ` · ${Math.round(idea.driveMiles)} miles` : ""}${idea.direction ? ` · ${escapeHtml(idea.direction)}` : ""}</span>
+              </span>
+            </label>
+            ${idea.description ? `<div class="idea-desc">${escapeHtml(idea.description)}</div>` : ""}
+            <div class="idea-tags">
+              <span class="tag ${idea.type==="event"?"event":""}">${idea.type==="event"?"Dated event":"Place or stop"}</span>
+              <span class="tag">${escapeHtml(idea.category)}</span>
+              <span class="tag">${escapeHtml(idea.cost)}</span>
+            </div>
+            ${source}
+          </article>
+        `;
+      }).join("");
+
+      $all(".idea-check").forEach(input=>input.addEventListener("change",event=>{
+        const id=event.currentTarget.dataset.ideaId;
+        if(event.currentTarget.checked) state.selectedIdeaIds.add(id);
+        else state.selectedIdeaIds.delete(id);
+        renderIdeaCards();
+        renderItinerary();
+      }));
+    }
+
+    function parseIdeaDate(value,fallback){
+      if(!value) return fallback;
+      const parsed=new Date(`${value}T12:00:00`);
+      return Number.isNaN(parsed.getTime()) ? fallback : parsed;
+    }
+
+    function directionsUrl(idea){
+      const origin=encodeURIComponent(`${state.home.city}, ${state.home.state}`);
+      const destination=idea.latitude && idea.longitude
+        ? `${idea.latitude},${idea.longitude}`
+        : encodeURIComponent(idea.address || ideaLocation(idea));
+      return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+    }
+
+    function renderItinerary(){
+      const selected=state.ideas.filter(idea=>state.selectedIdeaIds.has(idea.id));
+      if(selected.length===0){
+        $("detailCard").classList.add("hidden");
+        return;
+      }
+
+      const dates=formatDateRange();
+      const plan=calculateDrivePlan();
+      const pace=$("pace").value;
+      const stayStyle=$("stayStyle").value;
+      const primary=selected[0];
+      const days=plan.days;
+      const itinerary=Array.from({length:days},(_,index)=>({dayNum:index+1,date:addDays(dates.start,index),items:[]}));
+
+      selected.forEach((idea,index)=>{
+        let dayIndex;
+        if(idea.type==="event" && idea.startDate){
+          const eventDate=parseIdeaDate(idea.startDate,dates.start);
+          dayIndex=clamp(Math.round((eventDate-dates.start)/86400000),0,days-1);
+        }else{
+          const firstActivityDay=days===1 ? 0 : 1;
+          const lastActivityDay=days<=2 ? days-1 : days-2;
+          const span=Math.max(1,lastActivityDay-firstActivityDay+1);
+          dayIndex=firstActivityDay+(index%span);
+        }
+        itinerary[dayIndex].items.push(idea);
+      });
+
+      $("detailCard").classList.remove("hidden");
+      $("detailName").textContent=selected.length===1 ? `${primary.city || primary.name} WeekAway` : "Your WeekAway Road Trip";
+      $("detailSub").textContent=`${selected.length} selected idea${selected.length===1?"":"s"} · ${plan.oneWayHours} ${plan.oneWayHours===1?"hour":"hours"} maximum away · ${$("budget").options[$("budget").selectedIndex].text}`;
+
+      $("timeline").innerHTML=itinerary.map((day,index)=>{
+        const first=index===0;
+        const last=index===days-1;
+        const dayItems=day.items.slice(0,pace==="relaxed"?2:pace==="balanced"?3:4);
+        let html=`<article class="day-card"><div class="day-head"><b>Day ${day.dayNum} · ${shortDate(day.date)}</b><span>${dateOnly(day.date)}</span></div>`;
+
+        if(first && !plan.isDayTrip){
+          html+=`<div class="slot"><div class="slot-time">Travel</div><div><b>Drive toward ${escapeHtml(primary.city || primary.name)}</b><div class="slot-note">Fuel, meal, and stretch breaks are left inside the travel block instead of filling the day with extra activities.</div></div></div>`;
+        }
+
+        dayItems.forEach((idea,itemIndex)=>{
+          const labels=first && !plan.isDayTrip ? ["After arrival","Evening","Optional"] : ["Morning","Afternoon","Evening","Optional"];
+          html+=`<div class="slot"><div class="slot-time">${labels[itemIndex] || "Also"}</div><div><b>${escapeHtml(idea.name)}</b><div class="slot-note">${escapeHtml(ideaLocation(idea))}${idea.type==="event" && idea.startDate ? ` · ${escapeHtml(idea.startDate)}` : ""}</div></div></div>`;
+        });
+
+        if(!plan.isDayTrip && !last){
+          const sleepLabel=stayStyle==="camping" ? "Campground or cabin check-in" : stayStyle==="hotel" ? "Hotel or motel check-in" : "Check in and settle down";
+          html+=`<div class="slot"><div class="slot-time">Night</div><div><b>${escapeHtml(sleepLabel)}</b><div class="slot-note">Dinner and a normal night of sleep stay protected in the plan.</div></div></div>`;
+        }
+
+        if(last && !plan.isDayTrip){
+          html+=`<div class="slot"><div class="slot-time">Return</div><div><b>Drive home</b><div class="slot-note">The final day stays light enough for the return drive, meal stops, and normal rest.</div></div></div>`;
+        }else if(dayItems.length===0){
+          html+=`<div class="slot"><div class="slot-time">Flexible</div><div><b>Open time</b><div class="slot-note">Use this for a slow morning, an unplanned stop, or extra time at a favorite place.</div></div></div>`;
+        }
+
+        if(dayItems.length>0){
+          html+=`<a class="map-btn" href="${directionsUrl(dayItems[0])}" target="_blank" rel="noopener">📍 Open directions ↗</a>`;
+        }
+
+        html+=`</article>`;
+        return html;
+      }).join("");
+
+      $("detailCard").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    function resetApp(){
+      state.home=null;
+      state.maxDriveChoice="auto";
+      state.ideas=[];
+      state.selectedIdeaIds.clear();
+      state.activeFilter="all";
+      $("zipInput").value="";
+      $("zipStatus").textContent="";
+      $("checkZipBtn").textContent="Check";
+      $("duration").value="4";
+      $("budget").value="50-100";
+      $("pace").value="balanced";
+      $("stayStyle").value="either";
+      $("startDate").value=dateOnly(addDays(new Date(),1));
+      $all(".choice").forEach(button=>button.classList.toggle("active",button.dataset.hours==="auto"));
+      $all(".interest").forEach(button=>button.classList.toggle("active",["festivals","food","outdoors"].includes(button.dataset.interest)));
+      $("extraInterests").classList.add("hidden");
+      $("moreInterestsBtn").textContent="More interests";
+      $("loadingCard").classList.add("hidden");
+      $("resultsCard").classList.add("hidden");
+      $("detailCard").classList.add("hidden");
+      localStorage.removeItem("weekaway-home-zip");
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    $all(".choice").forEach(button=>button.addEventListener("click",()=>{
+      $all(".choice").forEach(choice=>choice.classList.remove("active"));
+      button.classList.add("active");
+      state.maxDriveChoice=button.dataset.hours;
+    }));
+
+    $all(".interest").forEach(button=>button.addEventListener("click",()=>button.classList.toggle("active")));
+    $("moreInterestsBtn").addEventListener("click",()=>{
+      const opening=$("extraInterests").classList.contains("hidden");
+      $("extraInterests").classList.toggle("hidden",!opening);
+      $("moreInterestsBtn").textContent=opening ? "Fewer interests" : "More interests";
+    });
+    $("checkZipBtn").addEventListener("click",lookupZip);
+    $("planBtn").addEventListener("click",buildTripMatches);
+    $("resetBtn").addEventListener("click",resetApp);
+
+    const savedZip=localStorage.getItem("weekaway-home-zip");
+    if(savedZip) $("zipInput").value=savedZip;
+    $("startDate").value=dateOnly(addDays(new Date(),1));
+  </script>
+</body>
+</html>
